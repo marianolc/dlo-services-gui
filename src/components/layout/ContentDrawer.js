@@ -1,29 +1,23 @@
-import {Route, Switch} from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import React from "react";
 
-import Customer from "../crud/Customer";
+import CustomerCreate from "../crud/CustomerCreate";
+import CustomerUpdate from "../crud/CustomerUpdate";
 import Customers from "../crud/Customers";
 
-
-class ContentDrawer extends React.Component {
-    render() {
-        return (
-
-            <Switch>
-                <Route path="/customers">
-                    <Customers/>
-                </Route>
-                <Route path="/new-customer">
-                    <Customer add/>
-                </Route>
-                <Route path="/customer/:id">
-                    <Customer edit/>
-                </Route>
-                <Route path="/">
-                </Route>
-            </Switch>
-        )
-    }
-}
+const ContentDrawer = (props) => (
+    <Switch>
+        <Route path="/customers">
+            <Customers />
+        </Route>
+        <Route path="/create-customer">
+            <CustomerCreate />
+        </Route>
+        <Route path="/update-customer/:id" component={CustomerUpdate}>
+        </Route>
+        <Route path="/">
+        </Route>
+    </Switch>
+);
 
 export default ContentDrawer;

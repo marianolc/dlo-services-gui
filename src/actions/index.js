@@ -1,97 +1,130 @@
+import {
+  AUTH_SIGN_IN, AUTH_SIGN_OUT, AUTH_ERROR, LIST_SUCCESS, LIST_REQUEST, LIST_FAILURE,
+  VIEW_REQUEST, VIEW_SUCCESS, VIEW_FAILURE
+} from './types';
 import services from "../apis/services";
-import fakes from "../apis/fakes";
+import history from '../history';
 
+/**
+ * Build the header needed for all api requests
+ */
+const buildHeader = () => ({
+  headers: {
+    Authorization: "Bearer " + localStorage.getItem("sessionToken")
+  }
+});
+
+// *********************************************************************************************************************
+// login
+// *********************************************************************************************************************
 export const login = (user, password) => {
-    return async function (dispatch) {
-        try {
-            const response = await services.post("/authenticate", {
-                username: user,
-                password
-            });
-            dispatch({type: "LOGIN", payload: response.data});
-        } catch (err) {
-            dispatch({type: "LOGIN_ERROR", payload: err});
-        }
-    };
+  return async function (dispatch) {
+    try {
+      const response = await services.post("/authenticate", {
+        username: user,
+        password
+      });
+      localStorage.setItem("sessionToken", response.data.token);
+      dispatch({ type: AUTH_SIGN_IN });
+    } catch (err) {
+      console.log(err);
+      dispatch({ type: AUTH_ERROR, payload: err });
+    }
+  };
 };
 
 export const logout = () => {
-    return async function (dispatch) {
-        try {
-            const response = await services.post("/logout");
-            dispatch({type: "LOGGED_OUT", payload: response});
-        } catch (err) {
-            dispatch({type: "LOGGED_OUT", payload: err});
-        }
-    };
+  return async function (dispatch) {
+    localStorage.removeItem("sessionToken");
+    dispatch({ type: AUTH_SIGN_OUT, payload: { message: null } });
+  };
 };
 
-export const users = () => {
-    return async function (dispatch) {
-        try {
-            const response = await fakes.get("/users");
-            dispatch({type: "USERS", payload: response.data});
-        } catch (err) {
-            dispatch({type: "USERS_ERROR", payload: err});
-        }
-    };
+function handleError(err, type) {
+  console.log(err);
+  if (err.response && err.response.data && err.response.data.status === 401)
+    return { type: AUTH_SIGN_OUT, payload: err.response.data.message };
+  if (err.response && err.response.data)
+    return { type: type, payload: err.response.data.message };
+  return { type, payload: err.message };
+}
+
+// *********************************************************************************************************************
+// crud actions
+// *********************************************************************************************************************
+
+const listView = path => {
+  return async function (dispatch) {
+    dispatch({ type: LIST_REQUEST });
+    try {
+      const response = await services.get("/api" + path, buildHeader()
+      );
+      dispatch({ type: LIST_SUCCESS, payload: response.data });
+    } catch (err) {
+      dispatch(handleError(err, LIST_FAILURE));
+    }
+  };
+};
+
+const readView = path => {
+  return async function (dispatch) {
+    dispatch({ type: VIEW_REQUEST });
+    try {
+      const response = await services.get("/api" + path, buildHeader());
+      dispatch({ type: VIEW_SUCCESS, payload: response.data });
+    } catch (err) {
+      dispatch(handleError(err, VIEW_FAILURE));
+    }
+  };
+};
+
+const createView = (path, data, dest) => {
+  return async function (dispatch) {
+    dispatch({ type: VIEW_REQUEST });
+    try {
+      /*const response = */await services.post("/api" + path, data, buildHeader());
+      dispatch({ type: VIEW_SUCCESS, payload: null });
+      history.push(dest);
+    } catch (err) {
+      dispatch(handleError(err, VIEW_FAILURE));
+    }
+  };
+};
+
+const updateView = (path, data, dest) => {
+  return async function (dispatch) {
+    dispatch({ type: VIEW_REQUEST });
+    try {
+      /*const response = */await services.put("/api" + path, data, buildHeader());
+      dispatch({ type: VIEW_SUCCESS, payload: null });
+      history.push(dest);
+    } catch (err) {
+      dispatch(handleError(err, VIEW_FAILURE));
+    }
+  };
+};
+
+const deleteView = (url, dest) => {
+  return async function (dispatch) {
+    dispatch({ type: VIEW_REQUEST });
+    try {
+      await services.delete("/api" + url, buildHeader());
+      // 
+      dispatch({ type: VIEW_SUCCESS, payload: null });
+      if (dest)
+        history.push(dest);
+    } catch (err) {
+      dispatch(handleError(err, VIEW_FAILURE));
+    }
+  };
 };
 
 // *********************************************************************************************************************
-// customers
 // *********************************************************************************************************************
-export const customers = () => {
-    return async function (dispatch) {
-        try {
-            const response = await services
-                .get("/api/customers", {headers: {Authorization: 'Bearer ' + localStorage.getItem('sessionToken')}})
-                .catch(error => {
-                    if (error.response.data.status===401) {
-                        console.log('session error');
-                        dispatch({type: "LOGGED_OUT", payload: error});
-                    }else {
-                        console.log('normal error');
-                        dispatch({type: "list_error", payload: error});
-                    }
-                });
-            dispatch({type: "list", payload: response.data});
-        } catch (err) {
-            dispatch({type: "list_error", payload: err});
-        }
-    };
-};
 
-export const customer = (id) => {
-    console.log(id);
-    return !id ?
-        {
-            type: "view", payload: {
-                name: null,
-                email: null
-            }
-        } : async function (dispatch) {
-            try {
-                const response = await services.get("/api/customer/" + id, {headers: {Authorization: 'Bearer ' + localStorage.getItem('sessionToken')}});
-                dispatch({type: "view", payload: response.data});
-            } catch (err) {
-                console.log(err);
-                dispatch({type: "view_error", payload: err});
-            }
-        };
-};
+export const customers = () => listView('/customers');
+export const customer = (id) => readView('/customer/' + id);
+export const createCustomer = (data) => createView('/customer', data, '/customers');
+export const updateCustomer = (id, data) => updateView('/customer/' + id, data, '/customers');
+export const deleteCustomer = (id) => deleteView('/customer/' + id, '/customers');
 
-export const newCustomer = (customer) => {
-    return async function (dispatch) {
-        try {
-            const response = await services.post("/api/customer", customer, {headers: {Authorization: 'Bearer ' + localStorage.getItem('sessionToken')}});
-            dispatch({type: "new", payload: response.data});
-        } catch (err) {
-            dispatch({type: "view_error", payload: err});
-        }
-    };
-};
-// *********************************************************************************************************************
-// *********************************************************************************************************************
-export const resetView = () => {
-    return {type: "view_reset"}
-};

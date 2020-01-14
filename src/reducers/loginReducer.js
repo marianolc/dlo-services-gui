@@ -1,22 +1,22 @@
+import { AUTH_SIGN_IN, AUTH_SIGN_OUT, AUTH_ERROR } from '../actions/types';
+
+const INITIAL_STATE = {
+    isSignedIn: (localStorage.getItem('sessionToken') !== null),
+    error: null
+}
+
 export default (
-    state = {
-        loggedIn: localStorage.hasOwnProperty('sessionToken'),
-        error: null,
-        token: localStorage.hasOwnProperty('sessionToken') ? localStorage.getItem('sessionToken') : null
-    },
+    state = INITIAL_STATE,
     action
 ) => {
 
     switch (action.type) {
-        case "LOGIN":
-            localStorage.setItem('sessionToken', action.payload.token);
-            return {...state, loggedIn: true, error: null, token: action.payload.token};
-        case "LOGGED_OUT":
-            console.log(action);
-            return {...state, loggedIn: false, error: action.payload.message, token: false};
-        case "LOGIN_ERROR":
-            console.log(action);
-            return {...state, error: action.payload.message, token: null};
+        case AUTH_SIGN_IN:
+            return { isSignedIn: true, error: null };
+        case AUTH_SIGN_OUT:
+            return { isSignedIn: false, error: action.payload.message };
+        case AUTH_ERROR:
+            return { isSignedIn: false, error: action.payload.message };
         default:
             return state;
     }

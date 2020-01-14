@@ -1,12 +1,14 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 
 import loginReducer from './loginReducer';
 import activeViewReducer from './activeViewReducer';
-import {listReducer, viewReducer} from './CrudReducer';
+import loadingReducer from './loadingReducer';
+import { listReducer, viewReducer } from './CrudReducer';
 
 export default combineReducers({
-    sessionStatus: loginReducer,
+    auth: loginReducer,
     viewStatus: activeViewReducer,
     listData: listReducer,
-    viewData: viewReducer
+    viewData: viewReducer,
+    loading: loadingReducer
 });

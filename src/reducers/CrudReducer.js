@@ -1,41 +1,51 @@
+import {
+  LIST_SUCCESS, LIST_FAILURE,
+  VIEW_SUCCESS, VIEW_FAILURE
+} from '../actions/types';
+
+const LIST_INITIAL_STATE = {
+  data: null,
+  error: null
+}
+
 export const listReducer = (
-    state = {
-        data: [],
-        error: null,
-        loaded: false
-    },
-    action
+  state = LIST_INITIAL_STATE,
+  action
 ) => {
-    switch (action.type) {
-        case "list":
-            return {data: action.payload, error: null, loaded: true};
-        case "list_error":
-            return {...state, error: action.payload.message, loaded: true};
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case LIST_SUCCESS:
+      return {
+        data: action.payload,
+        error: null
+      };
+    case LIST_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    default:
+      return state;
+  }
 };
+
+const VIEW_INITIAL_STATE = {
+  data: null,
+  error: null
+}
 
 export const viewReducer = (
-    state = {
-        data: {},
-        error: null,
-        loaded: false,
-        updated: false
-    },
-    action
+  state = VIEW_INITIAL_STATE,
+  action
 ) => {
-    switch (action.type) {
-        case "view_reset":
-            return {data: {}, error: null, loaded: false, updated: false};
-        case "view":
-            return {data: action.payload, error: null, loaded: true, updated: false};
-        case "new":
-            return {data: action.payload, error: null, loaded: true, updated: true};
-        case "view_error":
-            return {...state, error: action.payload.message, loaded: true, updated: false};
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case VIEW_SUCCESS:
+      return {
+        data: action.payload,
+        error: null
+      };
+    case VIEW_FAILURE:
+      return { ...state, error: action.payload };
+    default:
+      return state;
+  }
 };
-

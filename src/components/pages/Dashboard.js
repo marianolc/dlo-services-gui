@@ -7,11 +7,10 @@ import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Menu from "@material-ui/core/Menu";
-import {MenuItem} from "@material-ui/core";
-import {connect} from "react-redux";
-import {logout} from "../../actions";
-import {withStyles} from "@material-ui/core/styles";
-import {withRouter} from 'react-router-dom';
+import { MenuItem } from "@material-ui/core";
+import { connect } from "react-redux";
+import { withStyles } from "@material-ui/core/styles";
+import { withRouter } from 'react-router-dom';
 
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -22,84 +21,82 @@ import Divider from "@material-ui/core/Divider";
 import MailIcon from "@material-ui/icons/Mail";
 import ContentDrawer from "../layout/ContentDrawer";
 
+import { logout } from "../../actions";
+
 
 const drawerWidth = 240;
 
 const styles = theme => ({
-        root: {
-            display: 'flex',
-        },
-        appBar: {
-            zIndex: theme.zIndex.drawer + 1,
-            backgroundColor: "#E5E7E9",
-            color: "#000"
-        },
-        drawer: {
-            width: drawerWidth,
-            flexShrink: 0,
-        },
-        drawerPaper: {
-            width: drawerWidth,
-        },
-        grow: {
-            flexGrow: 1
-        },
-        content: {
-            flexGrow: 1,
-            padding: theme.spacing(3),
+    root: {
+        display: 'flex',
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        backgroundColor: "#E5E7E9",
+        color: "#000"
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+    },
+    drawerPaper: {
+        width: drawerWidth,
+    },
+    grow: {
+        flexGrow: 1
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
 
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
-            marginLeft: -drawerWidth,
-        },
-        toolbar: theme.mixins.toolbar,
-        menuButton: {
-            marginRight: theme.spacing(2),
-        },
-        contentShift: {
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            marginLeft: 0,
-        },
-        copyright: {
-            fontSize: '12px',
-            color: '#D7DBDD'
-        }
-    })
-;
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginLeft: -drawerWidth,
+    },
+    toolbar: theme.mixins.toolbar,
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    contentShift: {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+    },
+    copyright: {
+        fontSize: '12px',
+        color: '#D7DBDD'
+    }
+})
+    ;
 
 
 class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {anchorEl: null, open: true};
+        this.state = { anchorEl: null, open: true };
     }
 
     handleDrawerOpen = () => {
-        this.setState({open: true});
+        this.setState({ open: true });
     };
 
     handleDrawerClose = () => {
-        this.setState({open: false});
+        this.setState({ open: false });
     };
 
     handleMenuClose = () => {
-        this.setState({anchorEl: null});
-    };
-
-    handleLogout = () => {
-        this.props.logout();
+        this.setState({ anchorEl: null });
     };
 
     render() {
 
         //const classes = useStyles();
-        const {classes} = this.props;
+        const { classes } = this.props;
 
         const menuId = "primary-search-account-menu";
         const isMenuOpen = Boolean(this.state.anchorEl);
@@ -107,20 +104,20 @@ class Dashboard extends React.Component {
         const renderMenu = (
             <Menu
                 anchorEl={this.state.anchorEl}
-                anchorOrigin={{vertical: "top", horizontal: "right"}}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 id={menuId}
                 keepMounted
-                transformOrigin={{vertical: "top", horizontal: "right"}}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
                 open={isMenuOpen}
                 onClose={this.handleMenuClose}
             >
                 <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-                <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+                <MenuItem onClick={() => this.props.logout()}>Logout</MenuItem>
             </Menu>
         );
 
         const handleProfileMenuOpen = event => {
-            this.setState({anchorEl: event.currentTarget});
+            this.setState({ anchorEl: event.currentTarget });
         };
 
         return (
@@ -134,7 +131,7 @@ class Dashboard extends React.Component {
                                 onClick={this.state.open ? this.handleDrawerClose : this.handleDrawerOpen}
                                 edge="start"
                                 className={clsx(classes.menuButton, this.state.open && classes.hide)}>
-                                <MenuIcon/>
+                                <MenuIcon />
                             </IconButton>
 
                             <img
@@ -143,7 +140,7 @@ class Dashboard extends React.Component {
                                 alt="dlo_logo"
                             />
 
-                            <div className={classes.grow}/>
+                            <div className={classes.grow} />
                             <div>
                                 {
                                     /*<IconButton onClick={this.props.onToggleDark}>
@@ -159,7 +156,7 @@ class Dashboard extends React.Component {
                                     onClick={handleProfileMenuOpen}
                                     color="inherit"
                                 >
-                                    <AccountCircle/>
+                                    <AccountCircle />
                                 </IconButton>
                             </div>
                         </Toolbar>
@@ -175,27 +172,27 @@ class Dashboard extends React.Component {
 
                         }}
                     >
-                        <div className={classes.toolbar}/>
+                        <div className={classes.toolbar} />
                         <List>
                             <ListItem button onClick={() => this.props.history.push('/customers')}
-                                      selected={this.props.location.pathname === '/customers'}>
+                                selected={this.props.location.pathname === '/customers'}>
                                 <ListItemIcon>
-                                    <AccountCircle/>
+                                    <AccountCircle />
                                 </ListItemIcon>
-                                <ListItemText primary={"Clientes"}/>
+                                <ListItemText primary={"Clientes"} />
                             </ListItem>
                         </List>
-                        <Divider/>
+                        <Divider />
                         <List>
                             <ListItem button onClick={() => this.props.history.push('/')}
-                                      selected={this.props.activeView === 'USERS'}>
+                                selected={this.props.activeView === 'USERS'}>
                                 <ListItemIcon>
-                                    <MailIcon/>
+                                    <MailIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={"Otro"}/>
+                                <ListItemText primary={"Otro"} />
                             </ListItem>
                         </List>
-                        <Divider/>
+                        <Divider />
                     </Drawer>
 
                     <main
@@ -203,9 +200,9 @@ class Dashboard extends React.Component {
                             [classes.contentShift]: this.state.open,
                         })}
                     >
-                        <div className={classes.toolbar}/>
+                        <div className={classes.toolbar} />
                         <Paper>
-                            <ContentDrawer/>
+                            <ContentDrawer />
                         </Paper>
                     </main>
 
@@ -216,7 +213,7 @@ class Dashboard extends React.Component {
     }
 }
 
-const mapStateToProps = ({viewStatus}) => {
+const mapStateToProps = ({ viewStatus }) => {
     return {
         activeView: viewStatus.activeView
     };

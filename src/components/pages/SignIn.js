@@ -7,12 +7,12 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import {withStyles} from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 import ErrorMessage from "../shared/ErrorMessage";
-import {login} from "../../actions";
+import { login } from "../../actions";
 
 function Copyright() {
     return (
@@ -52,7 +52,7 @@ class SignIn extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {email: '', password: '', errors: {}}
+        this.state = { email: '', password: '', errors: {} }
     }
 
     isValid() {
@@ -60,10 +60,10 @@ class SignIn extends React.Component {
             return true;
         let errors = {};
         if (!this.state.email)
-            errors = {...errors, email: 'Required'};
+            errors = { ...errors, email: 'Required' };
         if (!this.state.password)
-            errors = {...errors, password: 'Required'};
-        this.setState({errors});
+            errors = { ...errors, password: 'Required' };
+        this.setState({ errors });
         console.log(errors);
         return false;
     }
@@ -75,27 +75,25 @@ class SignIn extends React.Component {
     };
 
     handleEmailChange = e => {
-        this.setState({email: e.target.value});
+        this.setState({ email: e.target.value });
     };
 
     handlePasswordChange = e => {
-        this.setState({password: e.target.value});
+        this.setState({ password: e.target.value });
     };
 
     addErrorIfNeeded() {
         if (this.props.error !== null)
             return (
                 <Container>
-                    <ErrorMessage message={this.props.error}/>
+                    <ErrorMessage message={this.props.error} />
                 </Container>
             );
         return null;
     }
 
     render() {
-        const {classes} = this.props;
-        console.log(this.state);
-        //const classes = useStyles();
+        const { classes } = this.props;
         return (
             <Container component="main" maxWidth="xs">
                 <div className={classes.paper}>
@@ -137,7 +135,7 @@ class SignIn extends React.Component {
                             onChange={this.handlePasswordChange}
                         />
                         <FormControlLabel
-                            control={<Checkbox value="remember" color="primary"/>}
+                            control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
                         />
                         <Button
@@ -159,18 +157,17 @@ class SignIn extends React.Component {
                     </form>
                 </div>
                 <Box mt={8}>
-                    <Copyright/>
+                    <Copyright />
                 </Box>
             </Container>
         );
     }
 }
 
-const mapStateToProps = ({sessionStatus}) => {
-    //console.log(sessionStatus);
+const mapStateToProps = ({ auth }) => {
     return {
-        error: sessionStatus.error
+        error: auth.error
     };
 };
 
-export default connect(mapStateToProps, {login})(withStyles(styles)(SignIn));
+export default connect(mapStateToProps, { login })(withStyles(styles)(SignIn));
