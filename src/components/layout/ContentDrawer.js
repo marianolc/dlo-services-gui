@@ -4,20 +4,20 @@ import React from "react";
 import CustomerCreate from "../crud/CustomerCreate";
 import CustomerUpdate from "../crud/CustomerUpdate";
 import Customers from "../crud/Customers";
+import Customer from "../crud/Customer";
+import LoadingScreen from "../shared/LoadingScreen";
 
 const ContentDrawer = (props) => (
-    <Switch>
-        <Route path="/customers">
-            <Customers />
-        </Route>
-        <Route path="/create-customer">
-            <CustomerCreate />
-        </Route>
-        <Route path="/update-customer/:id" component={CustomerUpdate}>
-        </Route>
-        <Route path="/">
-        </Route>
-    </Switch>
+    <React.Fragment>
+        <LoadingScreen />
+        <Switch>
+            <Route path="/customers" component={Customers} />
+            <Route path="/create-customer" component={CustomerCreate} />
+            <Route path="/update-customer/:id" component={CustomerUpdate} />
+            <Route path="/customer/:id" component={Customer} />
+            <Route path="/" />
+        </Switch>
+    </React.Fragment>
 );
 
 export default ContentDrawer;

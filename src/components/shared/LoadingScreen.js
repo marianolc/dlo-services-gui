@@ -2,6 +2,8 @@ import React from 'react';
 import Backdrop from "@material-ui/core/Backdrop";
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { connect } from "react-redux";
+import { createLoadingSelector } from '../../apis/selectors';
 
 const styles = theme => ({
     backdrop: {
@@ -13,7 +15,8 @@ const styles = theme => ({
 class LoadingScreen extends React.Component {
 
     render() {
-
+        if (!this.props.isFetchingList && !this.props.isFetchingView)
+            return null;
         return (
             <Backdrop
                 className={this.props.classes.backdrop}
@@ -24,7 +27,19 @@ class LoadingScreen extends React.Component {
         )
     }
 
+
 }
 
 
-export default withStyles(styles)(LoadingScreen);
+const loadingListSelector = createLoadingSelector(['LIST']);
+const loadingViewSelector = createLoadingSelector(['VIEW']);
+
+const mapStateToProps = ({ loading }) => {
+    return {
+        isFetchingList: loadingListSelector(loading),
+        isFetchingView: loadingViewSelector(loading)
+    };
+};
+
+const componentWithStyle = withStyles(styles)(LoadingScreen);
+export default connect(mapStateToProps, null)(componentWithStyle);

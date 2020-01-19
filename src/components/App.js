@@ -5,6 +5,8 @@ import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { red, blue } from "@material-ui/core/colors";
 import { Router } from "react-router-dom";
+import { I18nextProvider } from "react-i18next";
+import i18n from "../i18n";
 
 import history from '../history';
 import SignIn from "./pages/SignIn";
@@ -31,8 +33,10 @@ class App extends React.Component {
     return (
       <ThemeProvider theme={theme}>
         <React.Fragment>
-          <CssBaseline />
-          {content}
+          <I18nextProvider i18n={i18n}>
+            <CssBaseline />
+            {content}
+          </I18nextProvider>
         </React.Fragment>
       </ThemeProvider>
     );

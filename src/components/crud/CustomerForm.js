@@ -12,6 +12,7 @@ import { FormText, FormTextWithIcon } from '../shared/FormImputs';
 const CustomerForm = props => {
   const inputProps = props.read === true ? { readOnly: true } : {};
   const { errors, values, touched, handleChange, handleBlur } = props;
+  console.log(values);
   return (
     <React.Fragment>
       <div>

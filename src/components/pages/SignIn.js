@@ -11,6 +11,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { connect } from "react-redux";
 
+import { formContainerStyles } from '../shared/Styles';
 import ErrorMessage from "../shared/ErrorMessage";
 import { login } from "../../actions";
 
@@ -27,26 +28,6 @@ function Copyright() {
     );
 }
 
-const styles = theme => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        marginBottom: "30px"
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main
-    },
-    form: {
-        width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing(1)
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2)
-    }
-});
 
 class SignIn extends React.Component {
 
@@ -96,7 +77,7 @@ class SignIn extends React.Component {
         const { classes } = this.props;
         return (
             <Container component="main" maxWidth="xs">
-                <div className={classes.paper}>
+                <div className={classes.signin_paper}>
                     <img
                         src={process.env.PUBLIC_URL + "/logo_dlo_n.png"}
                         alt="dlo_logo"
@@ -170,4 +151,4 @@ const mapStateToProps = ({ auth }) => {
     };
 };
 
-export default connect(mapStateToProps, { login })(withStyles(styles)(SignIn));
+export default connect(mapStateToProps, { login })(withStyles(formContainerStyles)(SignIn));

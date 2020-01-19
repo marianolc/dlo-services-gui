@@ -1,15 +1,13 @@
 
 const INITIAL_STATE = {
-    LIST: true
 }
 
 const loadingReducer = (state = INITIAL_STATE, action) => {
     const { type } = action;
-    const matches = /(.*)_(REQUEST|SUCCESS|FAILURE)/.exec(type);
+    const matches = /(.*)_(DELETE|REQUEST|SUCCESS|FAILURE)/.exec(type);
 
     // not a *_REQUEST / *_SUCCESS /  *_FAILURE actions, so we ignore them
     if (!matches) return state;
-
     const [, requestName, requestState] = matches;
     return {
         ...state,
@@ -17,6 +15,7 @@ const loadingReducer = (state = INITIAL_STATE, action) => {
         // e.g. will be true when receiving GET_TODOS_REQUEST
         //      and false when receiving GET_TODOS_SUCCESS / GET_TODOS_FAILURE
         [requestName]: requestState === 'REQUEST',
+        [requestName + '_DELETE']: requestState === 'DELETE',
     };
 };
 

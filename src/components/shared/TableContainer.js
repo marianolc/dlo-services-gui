@@ -3,8 +3,6 @@ import { withStyles } from "@material-ui/core/styles";
 import MaterialTable, { MTableToolbar } from "material-table";
 import { Button, Grid, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
-import TextField from "@material-ui/core/TextField";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import Container from "@material-ui/core/Container";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { withRouter } from "react-router-dom";
@@ -12,7 +10,7 @@ import { withRouter } from "react-router-dom";
 import { formContainerStyles as styles } from "./Styles";
 import ErrorMessage from "./ErrorMessage";
 import AlertDialog from "./AlertDialog";
-import LoadingScreen from "./LoadingScreen";
+import FilterContainer from "./FilterContainer";
 
 class TableContainer extends React.Component {
 
@@ -30,9 +28,15 @@ class TableContainer extends React.Component {
     return null;
   }
 
-  drawLoadingScreenIfNeeded() {
-    if (this.props.isFetching)
-      return <LoadingScreen />;
+  addFiltersIfNeeded() {
+    if (!this.props.filters)
+      return;
+    return (
+      <FilterContainer
+        fields={this.props.filters}
+        onFilter={this.props.onFilter}
+      ></FilterContainer>
+    );
   }
 
   render() {
@@ -40,7 +44,6 @@ class TableContainer extends React.Component {
     const dataToShow = this.props.data ? this.props.data : [];
     return (
       <React.Fragment>
-        {this.drawLoadingScreenIfNeeded()}
         <MaterialTable
           title={""}
           // other props
@@ -91,17 +94,7 @@ class TableContainer extends React.Component {
                 {this.addErrorIfNeeded()}
                 <Grid justify="space-between" container>
                   <Grid>
-                    <div className={classes.titleElement}>
-                      <TextField id="standard-basic" label="Standard" />
-
-                      <Button
-                        color="secondary"
-                        className={classes.button}
-                        startIcon={<FilterListIcon />}
-                      >
-                        FILTER
-                      </Button>
-                    </div>
+                    {this.addFiltersIfNeeded()}
                   </Grid>
                   <Grid>
                     <MTableToolbar {...props} />
@@ -143,7 +136,11 @@ class TableContainer extends React.Component {
 
   handleDialogAccept() {
     this.props.onDelete(this.state.deleting);
+  }
+
+  handleDialogAcceptOk() {
     this.setState({ deleting: null });
+    this.props.onLoad();
   }
 
   drawDeleteDialogIfNeeded() {
@@ -153,6 +150,7 @@ class TableContainer extends React.Component {
           data={this.state.deleting}
           handleClose={() => this.handleDialogClose()}
           handleAccept={() => this.handleDialogAccept()}
+          handleAcceptOk={() => this.handleDialogAcceptOk()}
         />
       );
     else return null;

@@ -1,8 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { createLoadingSelector } from '../../apis/selectors';
-
 import FormContainer from "../shared/FormContainer";
 import { createCustomer } from "../../actions";
 import CustomerForm from "./CustomerForm";
@@ -20,21 +18,17 @@ class CustomerCreate extends React.Component {
         read={this.props.read}
         title={"Customer"}
         error={this.props.error}
-        urlBuilder={this.urlBuilder}
         content={CustomerForm}
         onSubmit={this.submitData}
         initialValues={{}}
-        isFetching={this.props.isFetching}
       />
     );
   }
 }
 
-const loadingSelector = createLoadingSelector(['VIEW']);
-const mapStateToProps = ({ viewData, loading }) =>
+const mapStateToProps = ({ viewData }) =>
   ({
-    error: viewData.error,
-    isFetching: loadingSelector(loading)
+    error: viewData.error
   });
 
 const componentWithStyle = withStyles(formContainerStyles)(CustomerCreate);

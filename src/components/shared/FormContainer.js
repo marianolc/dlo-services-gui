@@ -8,16 +8,10 @@ import {
 } from "@material-ui/icons";
 import { Formik } from "formik";
 
-import LoadingScreen from "../shared/LoadingScreen";
 import { formContainerStyles } from './Styles';
 import ErrorMessage from "./ErrorMessage";
 
 class FormContainer extends React.Component {
-
-  drawLoadingScreenIfNeeded() {
-    if (this.props.isFetching)
-      return <LoadingScreen />;
-  }
 
   drawActions() {
     const { classes } = this.props;
@@ -97,7 +91,6 @@ class FormContainer extends React.Component {
     const { classes } = this.props;
     return (
       <React.Fragment>
-        {this.drawLoadingScreenIfNeeded()}
         <Paper className={classes.root}>
           <Grid justify="space-between" container>
             <Grid>

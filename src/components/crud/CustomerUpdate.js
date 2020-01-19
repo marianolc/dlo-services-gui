@@ -1,7 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { createLoadingSelector } from '../../apis/selectors';
 import _ from "lodash";
 
 import FormContainer from "../shared/FormContainer";
@@ -33,23 +32,19 @@ class CustomerUpdate extends React.Component {
         isUpdate
         title={"Customer"}
         error={this.props.error}
-        urlBuilder={this.urlBuilder}
         content={CustomerForm}
         onSubmit={this.submitData}
         onDelete={this.deleteActual}
         initialValues={initialValues}
-        isFetching={this.props.isFetching}
       />
     );
   }
 }
 
-const loadingSelector = createLoadingSelector(['VIEW']);
-const mapStateToProps = ({ viewData, loading }) => {
+const mapStateToProps = ({ viewData }) => {
   return {
     data: viewData.data,
-    error: viewData.error,
-    isFetching: loadingSelector(loading)
+    error: viewData.error
   };
 };
 

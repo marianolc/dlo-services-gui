@@ -1,22 +1,31 @@
 import React from "react";
 import { connect } from "react-redux";
-import { createLoadingSelector } from '../../apis/selectors';
 
-import { customers, deleteCustomer } from "../../actions";
+import { customers, customersFiltered, deleteCustomer } from "../../actions";
 import TableContainer from "../shared/TableContainer";
 
 class Customers extends React.Component {
 
+  state = {
+    filters: {
+    }
+  }
+
   componentDidMount() {
-    this.loadData();
+    //this.loadData();
   }
 
   loadData() {
-    this.props.customers();
+    this.props.customersFiltered(this.state.filters);
   }
 
   deleteSelected(data) {
     this.props.deleteCustomer(data.id);
+  }
+
+  doFilter(data) {
+    this.setState({ filters: data })
+    this.props.customersFiltered(data);
   }
 
   render() {
@@ -31,7 +40,7 @@ class Customers extends React.Component {
         readView={"customer"}
         onDelete={(d) => this.deleteSelected(d)}
         idBuilder={r => r.id}
-        isFetching={this.props.isFetching}
+        isDeleting={this.props.isDeleting}
         columns={[
           { title: "Id", field: "id" },
           { title: "Reference code", field: "referenceId" },
@@ -42,18 +51,23 @@ class Customers extends React.Component {
           { title: "Phone 1", field: "phone1" },
           { title: "Phone 2", field: "phone2" }
         ]}
-      ></TableContainer>
+        filters={[
+          { title: "Id", field: "id", value: this.state.filters.id },
+          { title: "Reference code", field: "referenceId", value: this.state.filters.referenceId },
+          { title: "Name", field: "name", value: this.state.filters.name }
+        ]
+        }
+        onFilter={(data) => this.doFilter(data)}
+      />
     );
   }
 }
 
-const loadingSelector = createLoadingSelector(['LIST']);
-const mapStateToProps = ({ listData, loading }) => {
+const mapStateToProps = ({ listData }) => {
   return {
     data: listData.data,
-    error: listData.error,
-    isFetching: loadingSelector(loading)
+    error: listData.error
   };
 };
 
-export default connect(mapStateToProps, { customers, deleteCustomer })(Customers);
+export default connect(mapStateToProps, { customers, customersFiltered, deleteCustomer })(Customers);

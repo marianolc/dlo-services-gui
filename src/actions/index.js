@@ -1,6 +1,6 @@
 import {
   AUTH_SIGN_IN, AUTH_SIGN_OUT, AUTH_ERROR, LIST_SUCCESS, LIST_REQUEST, LIST_FAILURE,
-  VIEW_REQUEST, VIEW_SUCCESS, VIEW_FAILURE
+  VIEW_REQUEST, VIEW_SUCCESS, VIEW_FAILURE, VIEW_DELETE
 } from './types';
 import services from "../apis/services";
 import history from '../history';
@@ -106,7 +106,7 @@ const updateView = (path, data, dest) => {
 
 const deleteView = (url, dest) => {
   return async function (dispatch) {
-    dispatch({ type: VIEW_REQUEST });
+    dispatch({ type: VIEW_DELETE });
     try {
       await services.delete("/api" + url, buildHeader());
       // 
@@ -123,6 +123,11 @@ const deleteView = (url, dest) => {
 // *********************************************************************************************************************
 
 export const customers = () => listView('/customers');
+export const customersFiltered = (data) => {
+  const params = new URLSearchParams(data);
+  const url = '/customers?' + params;
+  return listView(url);
+}
 export const customer = (id) => readView('/customer/' + id);
 export const createCustomer = (data) => createView('/customer', data, '/customers');
 export const updateCustomer = (id, data) => updateView('/customer/' + id, data, '/customers');

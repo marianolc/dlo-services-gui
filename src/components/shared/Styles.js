@@ -40,6 +40,25 @@ export const formContainerStyles = theme => ({
     },
     titleElement: {
         padding: theme.spacing(2)
+    },
+    filterImput: {
+        margin: theme.spacing(1),
+        width: 100
+    },
+
+    signin_paper: {
+        marginTop: theme.spacing(8),
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        marginBottom: "30px"
+    },
+    signin_form: {
+        width: "100%", // Fix IE 11 issue.
+        marginTop: theme.spacing(1)
+    },
+    sigin_submit: {
+        margin: theme.spacing(3, 0, 2)
     }
 
 });
