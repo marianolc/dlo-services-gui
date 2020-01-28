@@ -4,36 +4,36 @@ import { connect } from "react-redux";
 import _ from "lodash";
 
 import FormContainer from "../shared/FormContainer";
-import { customer, updateCustomer, deleteCustomer } from "../../actions";
-import CustomerForm from "./CustomerForm";
+import { account, updateAccount, deleteAccount } from "../../actions";
+import AccountForm from "./AccountForm";
 import { formContainerStyles } from '../shared/Styles';
 import translated from '../shared/Translated';
 
-class CustomerUpdate extends React.Component {
+class AccountUpdate extends React.Component {
 
   componentDidMount() {
-    this.props.customer(this.props.match.params.id);
+    this.props.account(this.props.match.params.id);
   }
 
   submitData = (data) => {
-    this.props.updateCustomer(this.props.match.params.id, data);
+    this.props.updateAccount(this.props.match.params.id, data);
   };
 
   deleteActual = (data) => {
-    this.props.deleteCustomer(data.id);
+    this.props.deleteAccount(data.id);
   };
 
   render() {
     const initialValues = this.props.data === null ?
       null :
       _.pick(this.props.data,
-        "referenceId", "name", "address1", "address2", "phone", "phone2", "email");
+        "referenceId", "name");
     return (
       <FormContainer
         isUpdate
-        title={translated('customer.title.singular')}
+        title={translated('account.title.singular')}
         error={this.props.error}
-        content={CustomerForm}
+        content={AccountForm}
         onSubmit={this.submitData}
         onDelete={this.deleteActual}
         initialValues={initialValues}
@@ -49,6 +49,6 @@ const mapStateToProps = ({ viewData }) => {
   };
 };
 
-const componentWithStyle = withStyles(formContainerStyles)(CustomerUpdate);
+const componentWithStyle = withStyles(formContainerStyles)(AccountUpdate);
 
-export default connect(mapStateToProps, { customer, updateCustomer, deleteCustomer })(componentWithStyle);
+export default connect(mapStateToProps, { account, updateAccount, deleteAccount })(componentWithStyle);

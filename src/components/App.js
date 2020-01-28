@@ -7,7 +7,6 @@ import { red, blue } from "@material-ui/core/colors";
 import { Router } from "react-router-dom";
 import { I18nextProvider } from "react-i18next";
 import i18n from "../i18n";
-
 import history from '../history';
 import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
@@ -21,6 +20,7 @@ const theme = createMuiTheme({
 });
 
 class App extends React.Component {
+
   render() {
     const content = this.props.isSignedIn ? (
       <Router history={history}>

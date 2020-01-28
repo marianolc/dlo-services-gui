@@ -27,10 +27,10 @@ export const FilterText = (props) => {
 
 export const FormText = (props) => {
   const {
-    fieldName, description, placeholder, value, handleChange, handleBlur, type, errors, touched, inputProps
+    fieldName, description, placeholder, value, handleChange, handleBlur, type, error, touched, readOnly
   } = props;
-  const fieldTouched = touched && touched[fieldName];
-  const error = errors && errors[fieldName] && fieldTouched;
+  const inputProps = readOnly ? { readOnly: true } : {};
+  const hasError = error && touched;
   return (
     <TextField
       id={fieldName}
@@ -41,8 +41,8 @@ export const FormText = (props) => {
       onChange={handleChange}
       onBlur={handleBlur}
       inputProps={inputProps}
-      error={error}
-      helperText={error ? errors[fieldName] : ''}
+      error={hasError}
+      helperText={hasError ? error : ''}
       type={!type ? null : type}
     />);
 }

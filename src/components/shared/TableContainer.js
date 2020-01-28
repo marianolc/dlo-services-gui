@@ -11,6 +11,7 @@ import { formContainerStyles as styles } from "./Styles";
 import ErrorMessage from "./ErrorMessage";
 import AlertDialog from "./AlertDialog";
 import FilterContainer from "./FilterContainer";
+import translated from '../shared/Translated';
 
 class TableContainer extends React.Component {
 
@@ -39,6 +40,21 @@ class TableContainer extends React.Component {
     );
   }
 
+  drawRefreshButtonIfNeeded(classes) {
+    if (!this.props.isChildView) {
+      return (<Button
+        color="default"
+        className={classes.button}
+        startIcon={<CachedIcon />}
+        onClick={() => {
+          this.props.onLoad();
+        }}
+      >
+        {translated('layout.refresh')}
+      </Button>);
+    }
+
+  }
   render() {
     const { classes } = this.props;
     const dataToShow = this.props.data ? this.props.data : [];
@@ -51,7 +67,7 @@ class TableContainer extends React.Component {
           data={dataToShow}
           onRowClick={(event, rowData) =>
             this.props.history.push(
-              "/" + this.props.readView + "/" + this.props.idBuilder(rowData)
+              `/${this.props.readView}/${this.props.idBuilder(rowData)}`
             )
           }
           components={{
@@ -68,26 +84,16 @@ class TableContainer extends React.Component {
                   <Grid>
                     <div className={classes.titleElement}>
                       <Button
-                        color="primary"
+                        color="secondary"
                         className={classes.button}
                         startIcon={<AddCircleIcon />}
                         onClick={() =>
-                          this.props.history.push("/" + this.props.createView)
+                          this.props.history.push(`/${this.props.createView}`)
                         }
                       >
-                        ADD
+                        {translated('layout.add')}
                       </Button>
-
-                      <Button
-                        color="default"
-                        className={classes.button}
-                        startIcon={<CachedIcon />}
-                        onClick={() => {
-                          this.props.onLoad();
-                        }}
-                      >
-                        REFRESH
-                      </Button>
+                      {this.drawRefreshButtonIfNeeded(classes)}
                     </div>
                   </Grid>
                 </Grid>
@@ -124,6 +130,26 @@ class TableContainer extends React.Component {
                 })
             }
           ]}
+
+          localization={{
+            pagination: {
+              labelDisplayedRows: '{from}-{to} of {count}'
+            },
+            toolbar: {
+              nRowsSelected: '{0} row(s) selected',
+              searchTooltip: translated('layout.search'),
+              searchPlaceholder: translated('layout.search'),
+            },
+            header: {
+              actions: translated('layout.actions')
+            },
+            body: {
+              emptyDataSourceMessage: translated('layout.empty'),
+              filterRow: {
+                filterTooltip: translated('layout.filter')
+              }
+            }
+          }}
         />
         {this.drawDeleteDialogIfNeeded()}
       </React.Fragment>

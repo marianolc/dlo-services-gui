@@ -9,9 +9,14 @@ export const formStyles = makeStyles(theme => ({
     }
 }));
 
+const drawerWidth = 240;
+
 export const formContainerStyles = theme => ({
     root: {
         padding: theme.spacing(2, 2)
+    },
+    childContainer: {
+        margin: theme.spacing(3)
     },
     button: {
         margin: theme.spacing(1)
@@ -43,7 +48,7 @@ export const formContainerStyles = theme => ({
     },
     filterImput: {
         margin: theme.spacing(1),
-        width: 100
+        width: 150
     },
 
     signin_paper: {
@@ -59,6 +64,49 @@ export const formContainerStyles = theme => ({
     },
     sigin_submit: {
         margin: theme.spacing(3, 0, 2)
-    }
+    },
 
+    dashboard_root: {
+        display: 'flex',
+    },
+    dashboard_appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        backgroundColor: "#E5E7E9",
+        color: "#000"
+    },
+    dashboard_drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+    },
+    dashboard_drawerPaper: {
+        width: drawerWidth,
+    },
+    dashboard_grow: {
+        flexGrow: 1
+    },
+    dashboard_content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginLeft: -drawerWidth,
+    },
+    dashboard_toolbar: theme.mixins.toolbar,
+    dashboard_menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    dashboard_contentShift: {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+    },
+    dashboard_copyright: {
+        fontSize: '12px',
+        color: '#D7DBDD'
+    }
 });

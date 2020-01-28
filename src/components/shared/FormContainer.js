@@ -7,9 +7,9 @@ import {
   Save as SaveIcon
 } from "@material-ui/icons";
 import { Formik } from "formik";
-
 import { formContainerStyles } from './Styles';
 import ErrorMessage from "./ErrorMessage";
+import translated from "./Translated";
 
 class FormContainer extends React.Component {
 
@@ -22,7 +22,7 @@ class FormContainer extends React.Component {
           className={classes.button}
           startIcon={<DeleteIcon />}
           onClick={() => this.props.history.goBack()}
-        >DELETE
+        >{translated('layout.delete')}
         </Button>) : null}
         {!this.props.id ? (
           <Button
@@ -30,8 +30,8 @@ class FormContainer extends React.Component {
             className={classes.button}
             startIcon={<CachedIcon />}
           >
-            REFRESH
-      </Button>
+            {translated('layout.refresh')}
+          </Button>
         ) : null}
       </div>
     );
@@ -53,26 +53,31 @@ class FormContainer extends React.Component {
             return errors;
           }}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit
-        }) => (
+        {props => {
+          const {
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            submitCount
+          } = props;
+          return (
             <form autoComplete="off" onSubmit={handleSubmit}>
               <ContentName
+                submitCount={submitCount}
                 values={values}
                 errors={errors}
                 touched={touched}
                 handleChange={handleChange}
                 handleBlur={handleBlur}
               />
-              {this.actionBarIfNeeded()}
+              {this.actionBarIfNeeded(isSubmitting)}
             </form>
-          )
-        }
+          );
+        }}
       </Formik>
     );
   }
@@ -96,8 +101,7 @@ class FormContainer extends React.Component {
             <Grid>
               <div className={classes.titleElement}>
                 <Typography variant="h4" gutterBottom>
-                  {this.props.title +
-                    (!this.props.id ? "" : " #" + this.props.id)}
+                  {translated(this.props.title) + (!this.props.id ? "" : " #" + this.props.id)}
                 </Typography>
               </div>
             </Grid>
@@ -112,7 +116,7 @@ class FormContainer extends React.Component {
     );
   }
 
-  actionBarIfNeeded() {
+  actionBarIfNeeded(isSubmitting) {
     if (this.props.read) return null;
     const { actionBar, buttonAction } = this.props.classes;
     return (
@@ -124,8 +128,8 @@ class FormContainer extends React.Component {
           startIcon={<SaveIcon />}
           type="submit"
         >
-          SAVE
-        </Button>
+          {translated('layout.save')}
+        </Button >
       </div>
     );
   }

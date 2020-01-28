@@ -1,4 +1,5 @@
 
+export const CHANGE_LANGUAGE = "CHANGE_LANGUAGE";
 export const AUTH_SIGN_IN = "sign_in";
 export const AUTH_SIGN_OUT = "sign_out";
 export const AUTH_ERROR = "sign_error";

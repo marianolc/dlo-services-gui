@@ -8,11 +8,11 @@ import PhoneIcon from "@material-ui/icons/Phone";
 import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import { FormText, FormTextWithIcon } from '../shared/FormImputs';
+import translated from '../shared/Translated';
 
 const CustomerForm = props => {
-  const inputProps = props.read === true ? { readOnly: true } : {};
+  const inputProps = props.isRead === true ? { readOnly: true } : {};
   const { errors, values, touched, handleChange, handleBlur } = props;
-  console.log(values);
   return (
     <React.Fragment>
       <div>
@@ -20,7 +20,7 @@ const CustomerForm = props => {
           <Grid item xs={4}>
             <FormText
               fieldName={"referenceId"}
-              description={"Reference code"}
+              description={translated('customer.referenceId')}
               value={values.referenceId}
               handleChange={handleChange}
               handleBlur={handleBlur}
@@ -32,7 +32,7 @@ const CustomerForm = props => {
           <Grid item xs={8}>
             <FormText
               fieldName={"name"}
-              description={"Name"}
+              description={translated('customer.name')}
               value={values.name}
               handleChange={handleChange}
               handleBlur={handleBlur}
@@ -50,7 +50,7 @@ const CustomerForm = props => {
         <Grid item xs={4}>
           <FormTextWithIcon
             fieldName={"email"}
-            description={"Email"}
+            description={translated('customer.email')}
             value={values.email}
             type={'email'}
             handleChange={handleChange}
@@ -64,7 +64,7 @@ const CustomerForm = props => {
         <Grid item xs={4}>
           <FormTextWithIcon
             fieldName={"phone1"}
-            description={"Phone 1"}
+            description={translated('customer.phone1')}
             value={values.phone1}
             handleChange={handleChange}
             handleBlur={handleBlur}
@@ -77,7 +77,7 @@ const CustomerForm = props => {
         <Grid item xs={4}>
           <FormTextWithIcon
             fieldName={"phone2"}
-            description={"Phone 2"}
+            description={translated('customer.phone2')}
             value={values.phone2}
             handleChange={handleChange}
             handleBlur={handleBlur}
@@ -95,7 +95,7 @@ const CustomerForm = props => {
         <Grid item xs={12}>
           <FormText
             fieldName={"address1"}
-            description={"Address 1"}
+            description={translated('customer.address1')}
             value={values.address1}
             handleChange={handleChange}
             handleBlur={handleBlur}
@@ -108,7 +108,7 @@ const CustomerForm = props => {
         <Grid item xs={12}>
           <FormText
             fieldName={"address2"}
-            description={"Address 2"}
+            description={translated('customer.address2')}
             value={values.address2}
             handleChange={handleChange}
             handleBlur={handleBlur}

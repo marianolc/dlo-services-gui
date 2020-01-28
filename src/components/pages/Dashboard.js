@@ -4,63 +4,18 @@ import {
     Menu, Drawer, List, ListItem, ListItemText, Divider, AppBar, Toolbar, Paper, IconButton, MenuItem, ListItemIcon
 } from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import { withStyles } from "@material-ui/core/styles";
-import FlagIcon from '@material-ui/icons/Flag';
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import FlagOptionIcon from '@material-ui/icons/Flag';
+import { FlagIcon } from "react-flag-kit";
 
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom';
 
+import { formContainerStyles } from '../shared/Styles';
 import ContentDrawer from "../layout/ContentDrawer";
-import { logout } from "../../actions";
-
-const drawerWidth = 240;
-
-const styles = theme => ({
-    root: {
-        display: 'flex',
-    },
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        backgroundColor: "#E5E7E9",
-        color: "#000"
-    },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
-    grow: {
-        flexGrow: 1
-    },
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-
-        transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        marginLeft: -drawerWidth,
-    },
-    toolbar: theme.mixins.toolbar,
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    contentShift: {
-        transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-        marginLeft: 0,
-    },
-    copyright: {
-        fontSize: '12px',
-        color: '#D7DBDD'
-    }
-});
+import { logout, changeLanguage } from "../../actions";
+import translated from '../shared/Translated';
 
 class Dashboard extends React.Component {
 
@@ -84,12 +39,18 @@ class Dashboard extends React.Component {
     handleMenuClose = () => {
         this.setState({ anchorEl: null });
     };
+
     handleLanguageMenuClose = () => {
         this.setState({ anchorLanguageEl: null });
     };
 
-    render() {
+    changeLanguage(newlang) {
+        this.props.changeLanguage(newlang);
+        this.setState({ anchorLanguageEl: null });
+    }
 
+
+    render() {
         //const classes = useStyles();
         const { classes } = this.props;
         const languageMenuId = "primary-search-language-menu";
@@ -108,6 +69,12 @@ class Dashboard extends React.Component {
                 open={isLanguageMenuOpen}
                 onClose={this.handleLanguageMenuClose}
             >
+                <MenuItem onClick={() => this.changeLanguage('en')}>
+                    <FlagIcon code="US" size={32} />
+                </MenuItem>
+                <MenuItem onClick={() => this.changeLanguage('es')}>
+                    <FlagIcon code="ES" size={32} />
+                </MenuItem>
             </Menu>
         );
 
@@ -122,9 +89,11 @@ class Dashboard extends React.Component {
                 onClose={this.handleMenuClose}
             >
                 <MenuItem onClick={this.handleMenuClose}>
-                    Profile
+                    {translated('user.profile')}
                 </MenuItem>
-                <MenuItem onClick={() => this.props.logout()}>Logout</MenuItem>
+                <MenuItem onClick={() => this.props.logout()}>
+                    {translated('user.logout')}
+                </MenuItem>
             </Menu>
         );
 
@@ -138,15 +107,15 @@ class Dashboard extends React.Component {
 
         return (
             <React.Fragment>
-                <div className={classes.root}>
-                    <AppBar position="fixed" className={classes.appBar}>
+                <div className={classes.dashboard_root}>
+                    <AppBar position="fixed" className={classes.dashboard_appBar}>
                         <Toolbar>
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
                                 onClick={this.state.open ? this.handleDrawerClose : this.handleDrawerOpen}
                                 edge="start"
-                                className={clsx(classes.menuButton, this.state.open && classes.hide)}>
+                                className={clsx(classes.dashboard_menuButton, this.state.open && classes.dashboard_hide)}>
                                 <MenuIcon />
                             </IconButton>
 
@@ -156,7 +125,7 @@ class Dashboard extends React.Component {
                                 alt="dlo_logo"
                             />
 
-                            <div className={classes.grow} />
+                            <div className={classes.dashboard_grow} />
                             <div>
                                 <IconButton
                                     edge="end"
@@ -166,7 +135,7 @@ class Dashboard extends React.Component {
                                     onClick={handleLanguageMenuOpen}
                                     color="inherit"
                                 >
-                                    <FlagIcon />
+                                    <FlagOptionIcon />
                                 </IconButton>
                             </div>
                             <div>
@@ -185,34 +154,34 @@ class Dashboard extends React.Component {
                     </AppBar>
 
                     <Drawer
-                        className={classes.drawer}
+                        className={classes.dashboard_drawer}
                         variant="persistent"
                         anchor="left"
                         open={this.state.open}
                         classes={{
-                            paper: classes.drawerPaper,
+                            paper: classes.dashboard_drawerPaper,
 
                         }}
                     >
-                        <div className={classes.toolbar} />
+                        <div className={classes.dashboard_toolbar} />
                         <List>
                             <ListItem button onClick={() => this.props.history.push('/customers')}
                                 selected={this.props.location.pathname === '/customers'}>
                                 <ListItemIcon>
                                     <AccountCircle />
                                 </ListItemIcon>
-                                <ListItemText primary={"Clientes"} />
+                                <ListItemText primary={translated('menu.customers')} />
                             </ListItem>
                         </List>
                         <Divider />
                     </Drawer>
 
                     <main
-                        className={clsx(classes.content, {
-                            [classes.contentShift]: this.state.open,
+                        className={clsx(classes.dashboard_content, {
+                            [classes.dashboard_contentShift]: this.state.open,
                         })}
                     >
-                        <div className={classes.toolbar} />
+                        <div className={classes.dashboard_toolbar} />
                         <Paper>
                             <ContentDrawer />
                         </Paper>
@@ -225,7 +194,8 @@ class Dashboard extends React.Component {
     }
 }
 
-export default connect(null, { logout })(
-    withStyles(styles)(withRouter(Dashboard))
-);
+const componentWithRouter = withRouter(Dashboard);
+const componentWithStyles = withStyles(formContainerStyles)(componentWithRouter);
+
+export default connect(null, { logout, changeLanguage })(componentWithStyles);
 

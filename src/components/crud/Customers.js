@@ -3,16 +3,14 @@ import { connect } from "react-redux";
 
 import { customers, customersFiltered, deleteCustomer } from "../../actions";
 import TableContainer from "../shared/TableContainer";
+import translated from '../shared/Translated';
 
 class Customers extends React.Component {
 
   state = {
+    data: null,
     filters: {
     }
-  }
-
-  componentDidMount() {
-    //this.loadData();
   }
 
   loadData() {
@@ -31,7 +29,7 @@ class Customers extends React.Component {
   render() {
     return (
       <TableContainer
-        title={"Customers"}
+        title={translated('customer.title')}
         data={this.props.data}
         error={this.props.error}
         onLoad={() => this.loadData()}
@@ -42,20 +40,21 @@ class Customers extends React.Component {
         idBuilder={r => r.id}
         isDeleting={this.props.isDeleting}
         columns={[
-          { title: "Id", field: "id" },
-          { title: "Reference code", field: "referenceId" },
-          { title: "Name", field: "name" },
-          { title: "Email", field: "email" },
-          { title: "Address 1", field: "address1" },
-          { title: "Address 2", field: "address2" },
-          { title: "Phone 1", field: "phone1" },
-          { title: "Phone 2", field: "phone2" }
+          { title: translated('customer.id'), field: "id" },
+          { title: translated('customer.referenceId'), field: "referenceId" },
+          { title: translated('customer.name'), field: "name" },
+          { title: translated('customer.email'), field: "email" },
+          { title: translated('customer.address1'), field: "address1" },
+          { title: translated('customer.address2'), field: "address2" },
+          { title: translated('customer.phone1'), field: "phone1" },
+          { title: translated('customer.phone2'), field: "phone2" }
         ]}
-        filters={[
-          { title: "Id", field: "id", value: this.state.filters.id },
-          { title: "Reference code", field: "referenceId", value: this.state.filters.referenceId },
-          { title: "Name", field: "name", value: this.state.filters.name }
-        ]
+        filters={
+          [
+            { title: translated('customer.id'), field: "id", value: this.state.filters.id },
+            { title: translated('customer.referenceId'), field: "referenceId", value: this.state.filters.referenceId },
+            { title: translated('customer.name'), field: "name", value: this.state.filters.name }
+          ]
         }
         onFilter={(data) => this.doFilter(data)}
       />

@@ -7,13 +7,13 @@ import _ from 'lodash';
 
 import { formContainerStyles as styles } from "./Styles";
 import { FilterText } from './FormImputs';
+import translated from '../shared/Translated';
 
 class FilterContainer extends React.Component {
 
   render() {
     const { classes } = this.props;
     const initialValues = {};
-    console.log(this.props.fields);
     this.props.fields.map(
       f => initialValues[f.field] = f.value
     )
@@ -61,7 +61,7 @@ class FilterContainer extends React.Component {
                   startIcon={<FilterListIcon />}
                   type="submit"
                 >
-                  FILTER
+                  {translated('layout.filter')}
                 </Button>
               </form>
             )
