@@ -31,7 +31,8 @@
     "inventoryFamily.id": "Id",
     "inventoryFamily.name": "Name",
     "inventoryModel.id": "Id",
-    "inventoryModel.name": "Name",
+    "inventoryModel.n
+    ame": "Name",
     "inventoryModel.family": "Familia",
     "inventory.id": "Id",
     "inventory.mac": "Mac",
