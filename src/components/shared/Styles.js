@@ -1,17 +1,9 @@
-import { makeStyles } from "@material-ui/core/styles";
-
-export const formStyles = makeStyles(theme => ({
-    form_root: {
-        padding: theme.spacing(2, 2)
-    },
-    form_button: {
-        margin: theme.spacing(1)
-    }
-}));
+import React from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 
 const drawerWidth = 240;
 
-export const formContainerStyles = theme => ({
+export const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(2, 2)
     },
@@ -108,5 +100,14 @@ export const formContainerStyles = theme => ({
     dashboard_copyright: {
         fontSize: '12px',
         color: '#D7DBDD'
+    },
+    form_root: {
+        padding: theme.spacing(2, 2)
+    },
+    form_button: {
+        margin: theme.spacing(1)
     }
-});
+}));
+
+export const formContainerStyles = null;
+

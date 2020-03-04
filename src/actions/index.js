@@ -34,8 +34,7 @@ export const changeLanguage = (newLang) => {
   localStorage.setItem('lang', newLang);
   i18n.changeLanguage(newLang);
   return { type: CHANGE_LANGUAGE, payload: newLang }
-}
-
+};
 
 export const login = (user, password) => {
   return async function (dispatch) {
@@ -129,7 +128,7 @@ const deleteView = (url, data, dest) => {
     dispatch({ type: VIEW_DELETE });
     try {
       await services.delete("/api" + url, buildHeader());
-      // 
+      //
       dispatch({ type: VIEW_SUCCESS, payload: null });
       if (dest)
         pushOrReload(dest(data));

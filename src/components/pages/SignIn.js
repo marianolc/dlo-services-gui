@@ -7,13 +7,14 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { connect } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {makeStyles} from '@material-ui/core/styles';
 
-import { formContainerStyles } from '../shared/Styles';
 import ErrorMessage from "../shared/ErrorMessage";
-import { login } from "../../actions";
+import {login} from "../../actions";
+import {Field, Form, Formik} from "formik";
+import {useStyles} from '../shared/Styles';
 
 function Copyright() {
     return (
@@ -28,127 +29,113 @@ function Copyright() {
     );
 }
 
+const SignIn = (props) => {
+    const classes = useStyles();
+    const {error} = useSelector(auth => auth);
+    const dispatch = useDispatch();
 
-class SignIn extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = { email: '', password: '', errors: {} }
-    }
-
-    isValid() {
-        if (this.state.email && this.state.password)
-            return true;
-        let errors = {};
-        if (!this.state.email)
-            errors = { ...errors, email: 'Required' };
-        if (!this.state.password)
-            errors = { ...errors, password: 'Required' };
-        this.setState({ errors });
-        console.log(errors);
-        return false;
-    }
-
-    doLogin = event => {
-        event.preventDefault();
-        if (this.isValid())
-            this.props.login(this.state.email, this.state.password);
-    };
-
-    handleEmailChange = e => {
-        this.setState({ email: e.target.value });
-    };
-
-    handlePasswordChange = e => {
-        this.setState({ password: e.target.value });
-    };
-
-    addErrorIfNeeded() {
-        if (this.props.error !== null)
-            return (
-                <Container>
-                    <ErrorMessage message={this.props.error} />
-                </Container>
-            );
-        return null;
-    }
-
-    render() {
-        const { classes } = this.props;
-        return (
-            <Container component="main" maxWidth="xs">
-                <div className={classes.signin_paper}>
-                    <img
-                        src={process.env.PUBLIC_URL + "/logo_dlo_n.png"}
-                        alt="dlo_logo"
-                    ></img>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
-                    {this.addErrorIfNeeded()}
-                    <form className={classes.form}>
-                        <TextField
-                            error={!this.state.errors.email === false}
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            helperText={this.state.errors.email ? this.state.errors.email : ''}
-                            autoFocus
-                            onChange={this.handleEmailChange}
-                        />
-                        <TextField
-                            error={!this.state.errors.password === false}
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            helperText={this.state.errors.password ? this.state.errors.password : ''}
-                            onChange={this.handlePasswordChange}
-                        />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={e => this.doLogin(e)}
-                        >
-                            Sign In
-                        </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </form>
-                </div>
-                <Box mt={8}>
-                    <Copyright />
-                </Box>
-            </Container>
-        );
-    }
-}
-
-const mapStateToProps = ({ auth }) => {
-    return {
-        error: auth.error
-    };
+    return (
+        <Container component="main" maxWidth="xs">
+            <div className={classes.signin_paper}>
+                <img
+                    src={process.env.PUBLIC_URL + "/logo_dlo_n.png"}
+                    alt="dlo_logo"
+                />
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
+                {error && (<Container>
+                    <ErrorMessage message={error}/>
+                </Container>)}
+                <Formik
+                    initialValues={{email: '', password: ''}}
+                    validate={values => {
+                        const errors = {};
+                        if (!values.email)
+                            errors.email = 'Required';
+                        if (!values.password)
+                            errors.password = 'Required';
+                        return errors;
+                    }}
+                    onSubmit={(values) => {
+                        dispatch(login(values.email, values.password));
+                    }}
+                >
+                    {props => {
+                        const {
+                            values,
+                            touched,
+                            errors,
+                            dirty,
+                            isSubmitting,
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            handleReset
+                        } = props;
+                        console.log(errors, touched);
+                        return (
+                            <Form>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="email"
+                                    label="Email Address"
+                                    autoComplete="email"
+                                    autoFocus
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.email}
+                                    error={errors.email&&touched.email}
+                                    helperText={errors.email&&touched.email&&errors.email}
+                                />
+                                <TextField
+                                    required
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.password}
+                                    error={errors.password&&touched.password}
+                                    helperText={errors.password&&touched.password&&errors.password}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox value="remember" color="primary"/>}
+                                    label="Remember me"
+                                />
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit"
+                                    className={classes.submit}
+                                >
+                                    Sign In
+                                </Button>
+                                <Grid container>
+                                    <Grid item xs>
+                                        <Link href="#" variant="body2">
+                                            Forgot password?
+                                        </Link>
+                                    </Grid>
+                                </Grid>
+                            </Form>
+                        )
+                    }}
+                </Formik>
+            </div>
+            <Box mt={8}>
+                <Copyright/>
+            </Box>
+        </Container>
+    );
 };
 
-export default connect(mapStateToProps, { login })(withStyles(formContainerStyles)(SignIn));
+export default SignIn;
