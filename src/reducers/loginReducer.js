@@ -17,9 +17,9 @@ export default (
         case AUTH_SIGN_IN:
             return { isSignedIn: true, error: null };
         case AUTH_SIGN_OUT:
-            return { isSignedIn: false, error: action.payload.message };
+            return { isSignedIn: false, error: action.payload };
         case AUTH_ERROR:
-            return { isSignedIn: false, error: action.payload.message };
+            return { isSignedIn: false, error: action.payload };
         default:
             return state;
     }

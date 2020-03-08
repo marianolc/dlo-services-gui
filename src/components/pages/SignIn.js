@@ -9,11 +9,10 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import {useDispatch, useSelector} from "react-redux";
-import {makeStyles} from '@material-ui/core/styles';
 
 import ErrorMessage from "../shared/ErrorMessage";
 import {login} from "../../actions";
-import {Field, Form, Formik} from "formik";
+import {Form, Formik} from "formik";
 import {useStyles} from '../shared/Styles';
 
 function Copyright() {
@@ -29,11 +28,10 @@ function Copyright() {
     );
 }
 
-const SignIn = (props) => {
+const SignIn = () => {
     const classes = useStyles();
-    const {error} = useSelector(auth => auth);
+    const {error} = useSelector(({auth}) => auth);
     const dispatch = useDispatch();
-
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.signin_paper}>
@@ -66,16 +64,12 @@ const SignIn = (props) => {
                             values,
                             touched,
                             errors,
-                            dirty,
-                            isSubmitting,
                             handleChange,
                             handleBlur,
-                            handleSubmit,
-                            handleReset
+                            handleSubmit
                         } = props;
-                        console.log(errors, touched);
                         return (
-                            <Form>
+                            <Form onSubmit={handleSubmit}>
                                 <TextField
                                     variant="outlined"
                                     margin="normal"
@@ -88,8 +82,8 @@ const SignIn = (props) => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.email}
-                                    error={errors.email&&touched.email}
-                                    helperText={errors.email&&touched.email&&errors.email}
+                                    error={errors.email && touched.email}
+                                    helperText={errors.email && touched.email && errors.email}
                                 />
                                 <TextField
                                     required
@@ -103,8 +97,8 @@ const SignIn = (props) => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.password}
-                                    error={errors.password&&touched.password}
-                                    helperText={errors.password&&touched.password&&errors.password}
+                                    error={errors.password && touched.password}
+                                    helperText={errors.password && touched.password && errors.password}
                                 />
                                 <FormControlLabel
                                     control={<Checkbox value="remember" color="primary"/>}
