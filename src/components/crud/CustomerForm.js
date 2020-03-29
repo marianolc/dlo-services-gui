@@ -11,7 +11,6 @@ import { FormText, FormTextWithIcon } from '../shared/FormImputs';
 import translated from '../shared/Translated';
 
 const CustomerForm = props => {
-  const inputProps = props.isRead === true ? { readOnly: true } : {};
   const { errors, values, touched, handleChange, handleBlur } = props;
   return (
     <React.Fragment>
@@ -24,9 +23,10 @@ const CustomerForm = props => {
               value={values.referenceId}
               handleChange={handleChange}
               handleBlur={handleBlur}
-              inputProps={inputProps}
+              readOnly={props.isRead}
               errors={errors}
               touched={touched}
+              readOnly={props.isRead}
             />
           </Grid>
           <Grid item xs={8}>
@@ -36,7 +36,7 @@ const CustomerForm = props => {
               value={values.name}
               handleChange={handleChange}
               handleBlur={handleBlur}
-              inputProps={inputProps}
+              readOnly={props.isRead}
               errors={errors}
               touched={touched}
             />
@@ -55,7 +55,7 @@ const CustomerForm = props => {
             type={'email'}
             handleChange={handleChange}
             handleBlur={handleBlur}
-            inputProps={inputProps}
+            readOnly={props.isRead}
             errors={errors}
             touched={touched}
             icon={<AlternateEmailIcon />}
@@ -68,7 +68,7 @@ const CustomerForm = props => {
             value={values.phone1}
             handleChange={handleChange}
             handleBlur={handleBlur}
-            inputProps={inputProps}
+            readOnly={props.isRead}
             errors={errors}
             touched={touched}
             icon={<PhoneIcon />}
@@ -81,7 +81,7 @@ const CustomerForm = props => {
             value={values.phone2}
             handleChange={handleChange}
             handleBlur={handleBlur}
-            inputProps={inputProps}
+            readOnly={props.isRead}
             errors={errors}
             touched={touched}
             icon={<PhoneAndroidIcon />}
@@ -99,7 +99,7 @@ const CustomerForm = props => {
             value={values.address1}
             handleChange={handleChange}
             handleBlur={handleBlur}
-            inputProps={inputProps}
+            readOnly={props.isRead}
             errors={errors}
             touched={touched}
             type={'address'}
@@ -112,7 +112,7 @@ const CustomerForm = props => {
             value={values.address2}
             handleChange={handleChange}
             handleBlur={handleBlur}
-            inputProps={inputProps}
+            readOnly={props.isRead}
             errors={errors}
             touched={touched}
             type={'address'}

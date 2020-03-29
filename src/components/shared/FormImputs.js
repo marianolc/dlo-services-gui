@@ -6,8 +6,9 @@ import {
 
 export const FilterText = (props) => {
   const {
-    fieldName, description, placeholder, value, handleChange, handleBlur, errors, touched, inputProps, className
+    fieldName, description, placeholder, value, handleChange, handleBlur, errors, touched, className, readOnly
   } = props;
+  const inputProps = readOnly ? { readOnly: true } : {};
   const fieldTouched = touched && touched[fieldName];
   const error = errors && errors[fieldName] && fieldTouched;
   return (

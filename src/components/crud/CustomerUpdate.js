@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 
 import FormContainer from "../shared/FormContainer";
@@ -9,46 +9,30 @@ import CustomerForm from "./CustomerForm";
 import { formContainerStyles } from '../shared/Styles';
 import translated from '../shared/Translated';
 
-class CustomerUpdate extends React.Component {
 
-  componentDidMount() {
-    this.props.customer(this.props.match.params.id);
-  }
+const CustomerUpdate = (props) => {
+  const dispatch = useDispatch();
+  const { data, error } = useSelector(({ viewData }) => viewData);
+  useEffect(() => {
+    dispatch(customer(props.match.params.id));
+  }, []);
 
-  submitData = (data) => {
-    this.props.updateCustomer(this.props.match.params.id, data);
-  };
-
-  deleteActual = (data) => {
-    this.props.deleteCustomer(data.id);
-  };
-
-  render() {
-    const initialValues = this.props.data === null ?
-      null :
-      _.pick(this.props.data,
-        "referenceId", "name", "address1", "address2", "phone", "phone2", "email");
-    return (
-      <FormContainer
-        isUpdate
-        title={translated('customer.title.singular')}
-        error={this.props.error}
-        content={CustomerForm}
-        onSubmit={this.submitData}
-        onDelete={this.deleteActual}
-        initialValues={initialValues}
-      />
-    );
-  }
+  const initialValues = data ?
+    _.pick(data,
+      "referenceId", "name", "address1", "address2", "phone", "phone2", "email")
+    : {};
+  return (
+    <FormContainer
+      isUpdate
+      title={translated('customer.title.singular')}
+      error={error}
+      content={CustomerForm}
+      onSubmit={(data) => dispatch(updateCustomer(props.match.params.id, data))}
+      onDelete={(data) => dispatch(deleteCustomer(props.match.params.id, data))}
+      initialValues={data}
+    />
+  );
 }
 
-const mapStateToProps = ({ viewData }) => {
-  return {
-    data: viewData.data,
-    error: viewData.error
-  };
-};
 
-const componentWithStyle = withStyles(formContainerStyles)(CustomerUpdate);
-
-export default connect(mapStateToProps, { customer, updateCustomer, deleteCustomer })(componentWithStyle);
+export default CustomerUpdate;

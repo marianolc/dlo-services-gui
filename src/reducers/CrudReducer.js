@@ -1,6 +1,7 @@
 import {
   LIST_SUCCESS, LIST_FAILURE,
-  VIEW_SUCCESS, VIEW_FAILURE
+  VIEW_SUCCESS, VIEW_FAILURE,
+  LIST_REQUEST
 } from '../actions/types';
 
 const LIST_INITIAL_STATE = {
@@ -13,6 +14,11 @@ export const listReducer = (
   action
 ) => {
   switch (action.type) {
+    case LIST_REQUEST:
+      return {
+        ...state,
+        error: null
+      };
     case LIST_SUCCESS:
       return {
         data: action.payload,

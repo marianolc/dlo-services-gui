@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { customers, customersFiltered, deleteCustomer } from "../../actions";
+import { customersFiltered, deleteCustomer } from "../../actions";
 import TableContainer from "../shared/TableContainer";
 import translated from '../shared/Translated';
+import { CrudStore } from './CrudContext';
 
-
-const Customers = (props) => {
+const Customers = () => {
 
   const [filters, setFilters] = useState({});
   useEffect(() => {
     dispatch(customersFiltered(filters));
-  }, []);
+  }, [filters]);
   const dispatch = useDispatch();
   const { data } = useSelector(({ listData }) => listData);
-
-
   return (
+
     <TableContainer
-      title={translated('customer.title')}
       data={data}
-      onLoad={() => dispatch(customersFiltered(filters))}
-      createView={"create-customer"}
-      updateView={"update-customer"}
-      readView={"customer"}
-      onDelete={(d) => deleteCustomer(d.id)}
-      idBuilder={r => r.id}
-      isDeleting={false}
+      onRefresh={() => dispatch(customersFiltered(filters))}
+      title={translated('customer.title')}
       columns={[
         { title: translated('customer.id'), field: "id" },
         { title: translated('customer.referenceId'), field: "referenceId" },
@@ -45,7 +38,10 @@ const Customers = (props) => {
         ]
       }
       onFilter={(data) => setFilters(data)}
+      readView={'/customer'}
+      updateView={'/update-customer'}
     />
+
   );
 }
 

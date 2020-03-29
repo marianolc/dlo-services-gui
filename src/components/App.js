@@ -22,6 +22,7 @@ const theme = createMuiTheme({
 class App extends React.Component {
 
   render() {
+
     const content = this.props.isSignedIn ? (
       <Router history={history}>
         <Dashboard />
@@ -32,12 +33,10 @@ class App extends React.Component {
 
     return (
       <ThemeProvider theme={theme}>
-        <React.Fragment>
-          <I18nextProvider i18n={i18n}>
-            <CssBaseline />
-            {content}
-          </I18nextProvider>
-        </React.Fragment>
+        <I18nextProvider i18n={i18n}>
+          <CssBaseline />
+          {content}
+        </I18nextProvider>
       </ThemeProvider>
     );
   }
