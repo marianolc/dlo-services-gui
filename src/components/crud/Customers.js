@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { customersFiltered, deleteCustomer } from "../../actions";
 import TableContainer from "../shared/TableContainer";
 import translated from '../shared/Translated';
-import { CrudStore } from './CrudContext';
 
 const Customers = () => {
 
@@ -43,6 +42,6 @@ const Customers = () => {
     />
 
   );
-}
+};
 
 export default Customers;

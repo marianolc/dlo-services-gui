@@ -1,8 +1,11 @@
 
 export const CHANGE_LANGUAGE = "CHANGE_LANGUAGE";
-export const AUTH_SIGN_IN = "sign_in";
+
 export const AUTH_SIGN_OUT = "sign_out";
-export const AUTH_ERROR = "sign_error";
+
+export const AUTH_REQUEST = "AUTH_REQUEST";
+export const AUTH_SUCCESS = "AUTH_SUCCESS";
+export const AUTH_FAILURE = "AUTH_FAILURE";
 
 export const LIST_REQUEST = "LIST_REQUEST";
 export const LIST_SUCCESS = "LIST_SUCCESS";

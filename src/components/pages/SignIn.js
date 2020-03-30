@@ -30,7 +30,10 @@ function Copyright() {
 
 const SignIn = () => {
     const classes = useStyles();
-    const {error} = useSelector(({auth}) => auth);
+    const {error, loading} = useSelector(({auth, loading}) => ({
+        error: auth.error,
+        loading: loading.waitingRequest
+    }));
     const dispatch = useDispatch();
     return (
         <Container component="main" maxWidth="xs">
@@ -110,6 +113,7 @@ const SignIn = () => {
                                     color="primary"
                                     type="submit"
                                     className={classes.submit}
+                                    disabled={loading}
                                 >
                                     Sign In
                                 </Button>

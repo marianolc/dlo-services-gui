@@ -2,9 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { Container, Paper, Button, Grid, Typography } from "@material-ui/core";
-import {
-  Delete as DeleteIcon
-} from "@material-ui/icons";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import ErrorMessage from "./ErrorMessage";
 import translated from '../shared/Translated';
@@ -16,9 +14,9 @@ const drawActions = (classes, history) => {
       <Button
         color="primary"
         className={classes.button}
-        startIcon={<DeleteIcon />}
+        startIcon={<ArrowBackIcon />}
         onClick={() => history.goBack()}
-      >{translated('layout.delete')}
+      >{translated('layout.back')}
       </Button>
     </div>
   );
@@ -49,8 +47,7 @@ const ViewContainer = (props) => {
   }
 
   if (!props.values)
-    return <div></div>;
-
+    return <></>;
   return (
     <React.Fragment>
       <Paper className={classes.root}>
