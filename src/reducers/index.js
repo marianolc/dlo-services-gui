@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-
 import loginReducer from './loginReducer';
 import loadingReducer from './loadingReducer';
 import { listReducer, viewReducer } from './CrudReducer';

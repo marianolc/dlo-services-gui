@@ -24,7 +24,7 @@ export const FilterText = (props) => {
       error={error}
       helperText={error ? errors[fieldName] : ''}
     />);
-}
+};
 
 export const FormText = (props) => {
   const {
@@ -50,8 +50,9 @@ export const FormText = (props) => {
 
 export const FormTextWithIcon = (props) => {
   const {
-    fieldName, description, placeholder, value, handleChange, handleBlur, type, errors, touched, inputProps
+    fieldName, description, placeholder, value, handleChange, handleBlur, type, errors, touched, readOnly
   } = props;
+    const inputProps = readOnly ? { readOnly: true } : {};
   const fieldTouched = touched && touched[fieldName];
   const error = errors && errors[fieldName] && fieldTouched;
   return (<TextField

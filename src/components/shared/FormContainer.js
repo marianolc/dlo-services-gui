@@ -1,14 +1,13 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
 import { Container, Paper, Button, Grid, Typography } from "@material-ui/core";
-import { useHistory, useLocation } from "react-router-dom";
+import CancelIcon from '@material-ui/icons/Cancel';
+import { useHistory} from "react-router-dom";
 import {
   Cached as CachedIcon,
   Delete as DeleteIcon,
   Save as SaveIcon
 } from "@material-ui/icons";
 import { Formik } from "formik";
-import { formContainerStyles } from './Styles';
 import ErrorMessage from "./ErrorMessage";
 import translated from "./Translated";
 import { useStyles } from './Styles';
@@ -25,11 +24,12 @@ const drawActions = (classes, history, { isUpdate, id }) => {
       </Button>)}
       {!id && (
         <Button
-          color="default"
+          color="secondary"
           className={classes.button}
-          startIcon={<CachedIcon />}
+          startIcon={<CancelIcon />}
+          onClick={() => history.goBack()}
         >
-          {translated('layout.refresh')}
+          {translated('layout.cancel')}
         </Button>
       )}
     </div>
@@ -80,7 +80,7 @@ const getFormikForm = (classes, { initialValues, content, onSubmit }) => {
       }}
     </Formik>
   );
-}
+};
 
 const addErrorIfNeeded = (error) => {
   return error && (
@@ -88,7 +88,7 @@ const addErrorIfNeeded = (error) => {
       <ErrorMessage message={error} />
     </Container>
   );
-}
+};
 
 const actionBarIfNeeded = ({ actionBar, buttonAction }, isSubmitting) => {
   return (
@@ -104,7 +104,7 @@ const actionBarIfNeeded = ({ actionBar, buttonAction }, isSubmitting) => {
       </Button >
     </div>
   );
-}
+};
 
 const FormContainer = (props) => {
   const classes = useStyles();
@@ -131,6 +131,6 @@ const FormContainer = (props) => {
       </Paper>
     </React.Fragment>
   );
-}
+};
 
 export default FormContainer;

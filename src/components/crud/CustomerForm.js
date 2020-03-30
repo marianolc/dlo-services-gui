@@ -26,7 +26,6 @@ const CustomerForm = props => {
               readOnly={props.isRead}
               errors={errors}
               touched={touched}
-              readOnly={props.isRead}
             />
           </Grid>
           <Grid item xs={8}>

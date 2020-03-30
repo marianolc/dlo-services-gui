@@ -1,6 +1,6 @@
 import {
-    CHANGE_LANGUAGE, AUTH_SIGN_IN, AUTH_SIGN_OUT, AUTH_ERROR, LIST_SUCCESS, LIST_REQUEST, LIST_FAILURE,
-    VIEW_REQUEST, VIEW_SUCCESS, VIEW_FAILURE, VIEW_DELETE
+    CHANGE_LANGUAGE, AUTH_SUCCESS, AUTH_SIGN_OUT, AUTH_FAILURE, LIST_SUCCESS, LIST_REQUEST, LIST_FAILURE,
+    VIEW_REQUEST, VIEW_SUCCESS, VIEW_FAILURE, VIEW_DELETE, AUTH_REQUEST
 } from './types';
 import services from "../apis/services";
 import history from '../history';
@@ -39,14 +39,15 @@ export const changeLanguage = (newLang) => {
 export const login = (user, password) => {
     return async function (dispatch) {
         try {
+            dispatch({type: AUTH_REQUEST});
             const response = await services.post("/authenticate", {
                 username: user,
                 password
             });
             localStorage.setItem("sessionToken", response.data.token);
-            dispatch({type: AUTH_SIGN_IN});
+            dispatch({type: AUTH_SUCCESS});
         } catch (err) {
-            dispatch(handleError(err, AUTH_ERROR));
+            dispatch(handleError(err, AUTH_FAILURE));
         }
     };
 };
@@ -60,7 +61,7 @@ export const logout = () => {
 
 function handleError(err, type) {
     console.log(err);
-    if (err.response && err.response.data && err.response.data.status === 401)
+    if (err.response && err.response.data && err.response.data.status === 401 && type !== AUTH_FAILURE)
         return {type: AUTH_SIGN_OUT, payload: err.response.data.message};
     if (err.response && err.response.data)
         return {type: type, payload: err.response.data.message};

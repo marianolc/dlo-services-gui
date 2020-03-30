@@ -9,6 +9,8 @@
   "layout.refresh": "Refresh",
   "layout.save": "Save",
   "layout.delete": "Delete",
+  "layout.cancel": "Cancel",
+  "layout.back": "Back",
   "menu.customers": "Customers",
   "menu.accounts": "Accounts",
   "customer.title": "Customers",
