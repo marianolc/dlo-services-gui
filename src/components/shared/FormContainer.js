@@ -1,7 +1,8 @@
 import React from "react";
+import { useSelector } from 'react-redux';
 import { Container, Paper, Button, Grid, Typography } from "@material-ui/core";
 import CancelIcon from '@material-ui/icons/Cancel';
-import { useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
   Cached as CachedIcon,
   Delete as DeleteIcon,
@@ -12,21 +13,15 @@ import ErrorMessage from "./ErrorMessage";
 import translated from "./Translated";
 import { useStyles } from './Styles';
 
-const drawActions = (classes, history, { isUpdate, id }) => {
+const drawActions = (waitingUpdate, classes, history, { id }) => {
   return (
     <div className={classes.titleElement}>
-      {isUpdate && (<Button
-        color="primary"
-        className={classes.button}
-        startIcon={<DeleteIcon />}
-        onClick={() => history.goBack()}
-      >{translated('layout.delete')}
-      </Button>)}
       {!id && (
         <Button
           color="secondary"
           className={classes.button}
           startIcon={<CancelIcon />}
+          disabled={waitingUpdate}
           onClick={() => history.goBack()}
         >
           {translated('layout.cancel')}
@@ -82,12 +77,10 @@ const getFormikForm = (classes, { initialValues, content, onSubmit }) => {
   );
 };
 
-const addErrorIfNeeded = (error) => {
-  return error && (
-    <Container>
-      <ErrorMessage message={error} />
-    </Container>
-  );
+const addError = (error) => {
+  return (<Container>
+    <ErrorMessage message={error} />
+  </Container>)
 };
 
 const actionBarIfNeeded = ({ actionBar, buttonAction }, isSubmitting) => {
@@ -107,9 +100,15 @@ const actionBarIfNeeded = ({ actionBar, buttonAction }, isSubmitting) => {
 };
 
 const FormContainer = (props) => {
+
   const classes = useStyles();
   const history = useHistory();
-
+  const { error, waitingUpdate } = useSelector(({ viewData, loading }) => {
+    return ({
+      error: viewData.error,
+      waitingUpdate: loading.waitingUpdate
+    })
+  });
 
   return (
     <React.Fragment>
@@ -123,10 +122,10 @@ const FormContainer = (props) => {
             </div>
           </Grid>
           <Grid>
-            {drawActions(classes, history, props)}
+            {drawActions(waitingUpdate, classes, history, props)}
           </Grid>
         </Grid>
-        {addErrorIfNeeded()}
+        {error && addError(error)}
         {getFormikForm(classes, props)}
       </Paper>
     </React.Fragment>

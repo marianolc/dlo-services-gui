@@ -1,56 +1,52 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import HomeIcon from "@material-ui/icons/Home";
+import PersonIcon from "@material-ui/icons/Person";
+import GrainIcon from "@material-ui/icons/Grain";
+import Typography from "@material-ui/core/Typography";
+import { useHistory } from "react-router";
+
 import ViewContainer from "../shared/ViewContainer";
 import { account, deleteAccount } from "../../actions";
 import AccountForm from "./AccountForm";
-import translated from '../shared/Translated';
+import translated from "../shared/Translated";
+import { useStyles } from "../shared/Styles";
 
-class Account extends React.Component {
+const Account = (props) => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { data } = useSelector(({ viewData }) => viewData);
+  useEffect(() => {
+    dispatch(account(props.match.params.id));
+  }, []);
+  const classes = useStyles();
 
-  state = {
-    data: null
-  }
-
-  componentDidMount() {
-    this.showValues();
-  }
-
-  showValues() {
-    this.props.account(this.props.match.params.id);
-  }
-
-  deleteActual = (data) => {
-    this.props.deleteAccount(data);
-  };
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.data !== this.props.data) {
-      //Perform some operation here
-      this.setState({ data: this.props.data });
-    }
-  }
-
-  render() {
-    return (
+  return (
+    <>
+      {data && (
+        <Breadcrumbs aria-label='breadcrumb' className={classes.root}>
+          <Link
+            color='inherit'
+            href='/'
+            onClick={() => history.push(`/customer/${data.customerId}`)}
+            className={classes.breadcrumb_link}>
+            <PersonIcon className={classes.breadcrumb_icon} />
+            {translated("customer.title.singular")}
+          </Link>
+        </Breadcrumbs>
+      )}
       <ViewContainer
         isView
-        title={translated('account.title.singular')}
-        error={this.props.error}
+        title={translated("account.title.singular")}
         content={AccountForm}
-        onDelete={this.deleteActual}
-        values={this.state.data}
-        onRefresh={() => this.showValues()}
+        onDelete={(d) => dispatch(deleteAccount(d))}
+        values={data}
+        updateView={"/update-account"}
       />
-    );
-  }
-}
-
-const mapStateToProps = ({ viewData }) => {
-
-  return {
-    data: viewData.data,
-    error: viewData.error
-  };
+    </>
+  );
 };
 
-export default connect(mapStateToProps, { account, deleteAccount })(Account);
+export default Account;

@@ -39,26 +39,16 @@ const TableContainer = (props) => {
     // idbuilder function
     const idBuilder = props.idBuilder || ((d) => d.id);
 
-    function handleDialogAccept() {
+    function drawDeleteDialog({ onDelete }) {
+        return (
+            <AlertDialog
+                data={deleting}
+                onCancel={() => setDeleting(null)}
+                onConfirm={() => onDelete(deleting)}
+            />
+        );
     }
 
-    function handleDialogAcceptOk() {
-        setDeleting(null);
-        props.onLoad();
-    }
-
-    function drawDeleteDialogIfNeeded() {
-        if (deleting != null)
-            return (
-                <AlertDialog
-                    data={deleting}
-                    handleClose={() => setDeleting(null)}
-                    handleAcceptOk={() => handleDialogAcceptOk()}
-                    handleAccept={() => handleDialogAccept()}
-                />
-            );
-        else return null;
-    }
     return (
         <React.Fragment>
             <MaterialTable
@@ -87,7 +77,7 @@ const TableContainer = (props) => {
                                             className={classes.button}
                                             startIcon={<AddCircleIcon />}
                                             onClick={() =>
-                                                history.push(`/${props.createView}`)
+                                                history.push(`${props.createView}`)
                                             }
                                         >
                                             {translated('layout.add')}
@@ -127,8 +117,7 @@ const TableContainer = (props) => {
                         {
                             icon: "delete",
                             tooltip: "delete",
-                            onClick: (event, rowData) =>
-                                setDeleting(rowData)
+                            onClick: (event, rowData) => setDeleting(rowData)
                         }
                     ]}
 
@@ -152,8 +141,8 @@ const TableContainer = (props) => {
                     }
                 }}
             />
-            {drawDeleteDialogIfNeeded()}
-        </React.Fragment >
+            {deleting && drawDeleteDialog(props)}
+        </React.Fragment>
     );
 };
 

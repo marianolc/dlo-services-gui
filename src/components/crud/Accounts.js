@@ -1,70 +1,43 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-import { accounts, accountsFiltered, deleteAccount } from "../../actions";
+import { accountsFiltered, deleteAccount } from "../../actions";
 import TableContainer from "../shared/TableContainer";
 import translated from '../shared/Translated';
 import Status from '../shared/Status';
 
-class Accounts extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      filters: {
-        customerId: props.parent ? props.parent.id : null
-      }
-    }
+export const accountColumnDefs = [
+  { title: translated('account.id'), field: "id" },
+  { title: translated('account.referenceId'), field: "referenceId" },
+  { title: translated('account.name'), field: "name" },
+  {
+    title: translated('account.status'),
+    field: "status",
+    render: rowData => <Status text={rowData.status} />
   }
+];
 
-  loadData() {
-    this.props.accountsFiltered(this.state.filters);
-  }
+const Accounts = (props) => {
+  const parentId = props.parent.id;
+  const [filters, setFilters] = useState({});
+  useEffect(() => {
+    dispatch(accountsFiltered({ ...filters, customerId: parentId }));
+  }, [filters]);
+  const dispatch = useDispatch();
+  const data = useSelector(({ listData }) => listData.data);
 
-  deleteSelected(data) {
-    this.props.deleteAccount(data);
-  }
-
-  doFilter(data) {
-    this.setState({ filters: data })
-    this.props.accountsFiltered(data);
-  }
-
-  render() {
-    const parentId = this.props.parent.id;
-    return (
-      <TableContainer
-        title={this.props.isChildView ? translated('account.title.child') : translated('account.title')}
-        isChildView={this.props.isChildView === true}
-        data={this.props.data}
-        error={this.props.error}
-        onLoad={() => this.loadData()}
-        createView={`create-account/${parentId}`}
-        updateView={"update-account"}
-        readView={"account"}
-        onDelete={(d) => this.deleteSelected(d)}
-        idBuilder={r => r.id}
-        isDeleting={this.props.isDeleting}
-        columns={[
-          { title: translated('account.id'), field: "id" },
-          { title: translated('account.referenceId'), field: "referenceId" },
-          { title: translated('account.name'), field: "name" },
-          {
-            title: translated('account.status'),
-            field: "status",
-            render: rowData => <Status text={rowData.status} />
-          }
-        ]}
-      />
-    );
-  }
+  return (
+    <TableContainer
+      title={translated('account.title')}
+      data={data}
+      onRefresh={() => dispatch(accountsFiltered({ ...filters, customerId: parentId }))}
+      columns={accountColumnDefs}
+      createView={`/create-account/${parentId}`}
+      updateView={"/update-account"}
+      readView={"/account"}
+      onDelete={(d) => dispatch(deleteAccount(d))}
+    />
+  );
 }
 
-const mapStateToProps = ({ listData }, ownProps) => {
-  return {
-    data: ownProps.isChildView ? ownProps.data : listData.data,
-    error: ownProps.isChildView ? null : listData.error
-  };
-};
-
-export default connect(mapStateToProps, { accounts, accountsFiltered, deleteAccount })(Accounts);
+export default Accounts;

@@ -37,8 +37,10 @@ const Customers = () => {
         ]
       }
       onFilter={(data) => setFilters(data)}
+      onDelete={(data) => dispatch(deleteCustomer(data))}
       readView={'/customer'}
       updateView={'/update-customer'}
+      createView={'/create-customer'}
     />
 
   );

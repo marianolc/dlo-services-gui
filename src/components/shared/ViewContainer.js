@@ -1,75 +1,96 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { Container, Paper, Button, Grid, Typography } from "@material-ui/core";
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import EditIcon from "@material-ui/icons/Edit";
+import { Delete as DeleteIcon } from "@material-ui/icons";
 
+import AlertDialog from "./AlertDialog";
 import ErrorMessage from "./ErrorMessage";
-import translated from '../shared/Translated';
-import { useStyles } from '../shared/Styles';
+import translated from "../shared/Translated";
+import { useStyles } from "../shared/Styles";
 
-const drawActions = (classes, history) => {
+const addError = (error) => {
   return (
-    <div className={classes.titleElement}>
-      <Button
-        color="primary"
-        className={classes.button}
-        startIcon={<ArrowBackIcon />}
-        onClick={() => history.goBack()}
-      >{translated('layout.back')}
-      </Button>
-    </div>
-  );
-}
-
-const addErrorIfNeeded = (error) => {
-  return error && (
     <Container>
       <ErrorMessage message={error} />
     </Container>
   );
-}
+};
 
 const ViewContainer = (props) => {
-
   const history = useHistory();
   const classes = useStyles();
   const { error } = useSelector(({ viewData }) => viewData);
+  const [deleting, setDeleting] = useState(null);
 
   const drawContent = ({ values, content }) => {
-    if (!values)
-      return <></>;
+    if (!values) return <></>;
     const ContentName = content;
-    return (<ContentName
-      isRead
-      values={values}
-    />);
-  }
+    return <ContentName isRead values={values} />;
+  };
 
-  if (!props.values)
-    return <></>;
+  if (!props.values) return <></>;
+
+  // idbuilder function
+  const idBuilder = props.idBuilder || ((d) => d.id);
+
+  //
   return (
     <React.Fragment>
+      {deleting && (
+        <AlertDialog
+          data={deleting}
+          onCancel={() => setDeleting(null)}
+          onConfirm={props.onDelete}
+        />
+      )}
       <Paper className={classes.root}>
-        <Grid justify="space-between" container>
+        <Grid justify='space-between' container>
           <Grid>
             <div className={classes.titleElement}>
-              <Typography variant="h4" gutterBottom>
-                {props.title +
-                  (!props.id ? "" : " #" + props.id)}
+              <Typography variant='h4' gutterBottom>
+                {props.title + (!props.id ? "" : " #" + props.id)}
               </Typography>
             </div>
           </Grid>
           <Grid>
-            {drawActions(classes, history)}
+            <div className={classes.titleElement}>
+              <Button
+                color='primary'
+                className={classes.button}
+                startIcon={<DeleteIcon />}
+                onClick={() => setDeleting(props.values)}>
+                {translated("layout.delete")}
+              </Button>
+              {props.updateView && (
+                <Button
+                  className={classes.button}
+                  color='secondary'
+                  startIcon={<EditIcon />}
+                  onClick={() =>
+                    history.push(
+                      `${props.updateView}/${idBuilder(props.values)}`
+                    )
+                  }>
+                  {translated("layout.update")}
+                </Button>
+              )}
+              <Button
+                className={classes.button}
+                startIcon={<ArrowBackIcon />}
+                onClick={() => history.goBack()}>
+                {translated("layout.back")}
+              </Button>
+            </div>
           </Grid>
         </Grid>
-        {addErrorIfNeeded(error)}
+        {error && addError(error)}
         {drawContent(props)}
       </Paper>
     </React.Fragment>
   );
-}
-
+};
 
 export default ViewContainer;

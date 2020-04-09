@@ -7,7 +7,6 @@ import translated from '../shared/Translated';
 
 const AccountForm = props => {
   const { errors = {}, values, touched = {}, handleChange, handleBlur, isRead, submitCount } = props;
-  const readOnly = isRead === true;
   return (
     <React.Fragment>
       <Grid container spacing={3}>
@@ -20,7 +19,7 @@ const AccountForm = props => {
             touched={submitCount > 0 || touched.referenceId}
             handleChange={handleChange}
             handleBlur={handleBlur}
-            readOnly={readOnly}
+            readOnly={isRead}
           />
         </Grid>
         <Grid item xs={8}>
@@ -32,7 +31,7 @@ const AccountForm = props => {
             touched={submitCount > 0 || touched.name}
             handleChange={handleChange}
             handleBlur={handleBlur}
-            readOnly={readOnly}
+            readOnly={isRead}
           />
         </Grid>
       </Grid>

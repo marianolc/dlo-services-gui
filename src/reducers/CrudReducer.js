@@ -1,6 +1,7 @@
 import {
   LIST_SUCCESS, LIST_FAILURE,
   VIEW_SUCCESS, VIEW_FAILURE,
+  VIEW_REQUEST,
   LIST_REQUEST
 } from '../actions/types';
 
@@ -44,6 +45,8 @@ export const viewReducer = (
   action
 ) => {
   switch (action.type) {
+    case VIEW_REQUEST:
+      return { ...state, error: null };
     case VIEW_SUCCESS:
       return {
         data: action.payload,

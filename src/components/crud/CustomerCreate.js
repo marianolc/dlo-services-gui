@@ -1,37 +1,21 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import FormContainer from "../shared/FormContainer";
 import { createCustomer } from "../../actions";
 import CustomerForm from "./CustomerForm";
-import { formContainerStyles } from '../shared/Styles';
 import translated from '../shared/Translated';
 
-class CustomerCreate extends React.Component {
+const CustomerCreate = () => {
+  const dispatch = useDispatch();
 
-  submitData = (data) => {
-    this.props.createCustomer(data);
-  };
-
-  render() {
-    return (
-      <FormContainer
-        read={this.props.read}
-        title={translated('customer.title.singular')}
-        error={this.props.error}
-        content={CustomerForm}
-        onSubmit={this.submitData}
-        initialValues={{}}
-      />
-    );
-  }
+  return (
+    <FormContainer
+      title={translated('customer.title.singular')}
+      content={CustomerForm}
+      onSubmit={(d) => dispatch(createCustomer(d))}
+      initialValues={{}}
+    />
+  );
 }
 
-const mapStateToProps = ({ viewData }) =>
-  ({
-    error: viewData.error
-  });
-
-const componentWithStyle = withStyles(formContainerStyles)(CustomerCreate);
-
-export default connect(mapStateToProps, { createCustomer })(componentWithStyle);
+export default CustomerCreate;

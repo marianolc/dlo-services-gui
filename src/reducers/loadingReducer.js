@@ -15,7 +15,7 @@ const loadingReducer = (state = INITIAL_STATE, action) => {
         // Store whether a request is happening at the moment or not
         // e.g. will be true when receiving GET_TODOS_REQUEST
         //      and false when receiving GET_TODOS_SUCCESS / GET_TODOS_FAILURE
-        waitingUpdate: requestState === 'UPDATE',
+        waitingUpdate: (requestState === 'UPDATE'),
         updateOk: state.waitingUpdate && requestState === 'OK',
         waitingRequest: requestState === 'REQUEST'
     };

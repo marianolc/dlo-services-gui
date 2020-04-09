@@ -11,6 +11,7 @@
   "layout.delete": "Delete",
   "layout.cancel": "Cancel",
   "layout.back": "Back",
+  "layout.update": "Update",
   "menu.customers": "Customers",
   "menu.accounts": "Accounts",
   "customer.title": "Customers",

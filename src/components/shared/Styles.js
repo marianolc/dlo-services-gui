@@ -106,7 +106,15 @@ export const useStyles = makeStyles(theme => ({
     },
     form_button: {
         margin: theme.spacing(1)
-    }
+    },
+    breadcrumb_link: {
+        display: 'flex',
+    },
+    breadcrumb_icon: {
+        marginRight: theme.spacing(0.5),
+        width: 20,
+        height: 20,
+    },
 }));
 
 export const formContainerStyles = null;

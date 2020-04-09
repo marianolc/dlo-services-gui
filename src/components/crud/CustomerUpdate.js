@@ -16,11 +16,6 @@ const CustomerUpdate = (props) => {
   useEffect(() => {
     dispatch(customer(props.match.params.id));
   }, []);
-
-  const initialValues = data ?
-    _.pick(data,
-      "referenceId", "name", "address1", "address2", "phone", "phone2", "email")
-    : {};
   return (
     <FormContainer
       isUpdate
