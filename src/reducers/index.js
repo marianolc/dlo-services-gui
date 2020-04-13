@@ -1,11 +1,10 @@
-import { combineReducers } from 'redux';
-import loginReducer from './loginReducer';
-import loadingReducer from './loadingReducer';
-import { listReducer, viewReducer } from './CrudReducer';
+import { combineReducers } from "redux";
+import loginReducer from "./loginReducer";
+import loadingReducer from "./loadingReducer";
+import crudReducer from "./CrudReducer";
 
 export default combineReducers({
-    auth: loginReducer,
-    listData: listReducer,
-    viewData: viewReducer,
-    loading: loadingReducer
+  auth: loginReducer,
+  crudData: crudReducer,
+  loading: loadingReducer,
 });

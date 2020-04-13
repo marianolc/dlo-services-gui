@@ -1,56 +1,65 @@
 import {
-  LIST_SUCCESS, LIST_FAILURE,
-  VIEW_SUCCESS, VIEW_FAILURE,
+  LIST_SUCCESS,
+  LIST_FAILURE,
+  VIEW_SUCCESS,
+  VIEW_FAILURE,
   VIEW_REQUEST,
-  LIST_REQUEST
-} from '../actions/types';
+  LIST_REQUEST,
+  INVENTORY_FAMILIES_SUCCESS,
+  INVENTORY_MODEL_SUCCESS,
+  INVENTORY_MODELS_SUCCESS,
+} from "../actions/types";
 
-const LIST_INITIAL_STATE = {
+const INITIAL_STATE = {
   data: null,
-  error: null
-}
+  error: null,
+  inventoryFamilies: [],
+  inventoryModels: [],
+  inventoryModel: null,
+};
 
-export const listReducer = (
-  state = LIST_INITIAL_STATE,
-  action
-) => {
+const crudReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case LIST_REQUEST:
       return {
         ...state,
-        error: null
+        error: null,
       };
     case LIST_SUCCESS:
       return {
         data: action.payload,
-        error: null
+        error: null,
       };
     case LIST_FAILURE:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       };
-    default:
-      return state;
-  }
-};
-
-const VIEW_INITIAL_STATE = {
-  data: null,
-  error: null
-}
-
-export const viewReducer = (
-  state = VIEW_INITIAL_STATE,
-  action
-) => {
-  switch (action.type) {
+    case INVENTORY_FAMILIES_SUCCESS:
+      return {
+        ...state,
+        inventoryFamilies: action.payload,
+        error: null,
+      };
+    case INVENTORY_MODELS_SUCCESS:
+      return {
+        ...state,
+        inventoryModels: action.payload,
+        error: null,
+      };
+    case INVENTORY_MODEL_SUCCESS:
+      return {
+        ...state,
+        inventoryModel: action.payload[0].data,
+        inventoryFamilies: action.payload[1].data,
+        error: null,
+      };
     case VIEW_REQUEST:
       return { ...state, error: null };
     case VIEW_SUCCESS:
       return {
         data: action.payload,
-        error: null
+        error: null,
       };
     case VIEW_FAILURE:
       return { ...state, error: action.payload };
@@ -58,3 +67,5 @@ export const viewReducer = (
       return state;
   }
 };
+
+export default crudReducer;

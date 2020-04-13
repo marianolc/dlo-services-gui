@@ -22,7 +22,7 @@ const addError = (error) => {
 const ViewContainer = (props) => {
   const history = useHistory();
   const classes = useStyles();
-  const { error } = useSelector(({ viewData }) => viewData);
+  const { error } = useSelector(({ crudData }) => crudData);
   const [deleting, setDeleting] = useState(null);
 
   const drawContent = ({ values, content }) => {
@@ -57,13 +57,15 @@ const ViewContainer = (props) => {
           </Grid>
           <Grid>
             <div className={classes.titleElement}>
-              <Button
-                color='primary'
-                className={classes.button}
-                startIcon={<DeleteIcon />}
-                onClick={() => setDeleting(props.values)}>
-                {translated("layout.delete")}
-              </Button>
+              {props.onDelete && (
+                <Button
+                  color='primary'
+                  className={classes.button}
+                  startIcon={<DeleteIcon />}
+                  onClick={() => setDeleting(props.values)}>
+                  {translated("layout.delete")}
+                </Button>
+              )}
               {props.updateView && (
                 <Button
                   className={classes.button}

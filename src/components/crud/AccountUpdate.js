@@ -6,11 +6,10 @@ import _ from "lodash";
 import FormContainer from "../shared/FormContainer";
 import { account, updateAccount, deleteAccount } from "../../actions";
 import AccountForm from "./AccountForm";
-import { formContainerStyles } from '../shared/Styles';
-import translated from '../shared/Translated';
+import { formContainerStyles } from "../shared/Styles";
+import translated from "../shared/Translated";
 
 class AccountUpdate extends React.Component {
-
   componentDidMount() {
     this.props.account(this.props.match.params.id);
   }
@@ -24,14 +23,14 @@ class AccountUpdate extends React.Component {
   };
 
   render() {
-    const initialValues = this.props.data === null ?
-      null :
-      _.pick(this.props.data,
-        "referenceId", "name");
+    const initialValues =
+      this.props.data === null
+        ? null
+        : _.pick(this.props.data, "referenceId", "name");
     return (
       <FormContainer
         isUpdate
-        title={translated('account.title.singular')}
+        title={translated("account.title.singular")}
         error={this.props.error}
         content={AccountForm}
         onSubmit={this.submitData}
@@ -42,13 +41,17 @@ class AccountUpdate extends React.Component {
   }
 }
 
-const mapStateToProps = ({ viewData }) => {
+const mapStateToProps = ({ crudData }) => {
   return {
-    data: viewData.data,
-    error: viewData.error
+    data: crudData.data,
+    error: crudData.error,
   };
 };
 
 const componentWithStyle = withStyles(formContainerStyles)(AccountUpdate);
 
-export default connect(mapStateToProps, { account, updateAccount, deleteAccount })(componentWithStyle);
+export default connect(mapStateToProps, {
+  account,
+  updateAccount,
+  deleteAccount,
+})(componentWithStyle);

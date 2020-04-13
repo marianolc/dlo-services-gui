@@ -17,7 +17,7 @@ import { useStyles } from "../shared/Styles";
 const Account = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { data } = useSelector(({ viewData }) => viewData);
+  const { data } = useSelector(({ crudData }) => crudData);
   useEffect(() => {
     dispatch(account(props.match.params.id));
   }, []);
