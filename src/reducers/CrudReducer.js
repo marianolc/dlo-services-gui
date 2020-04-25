@@ -5,6 +5,10 @@ import {
   VIEW_FAILURE,
   VIEW_REQUEST,
   LIST_REQUEST,
+  ACCOUNT_SUCCESS,
+  ACCOUNTS_SUCCESS,
+  CUSTOMER_SUCCESS,
+  CUSTOMERS_SUCCESS,
   INVENTORY_FAMILIES_SUCCESS,
   INVENTORY_MODEL_SUCCESS,
   INVENTORY_MODELS_SUCCESS,
@@ -13,6 +17,10 @@ import {
 const INITIAL_STATE = {
   data: null,
   error: null,
+  account: null,
+  accounts: [],
+  customer: null,
+  customers: [],
   inventoryFamilies: [],
   inventoryModels: [],
   inventoryModel: null,
@@ -34,6 +42,30 @@ const crudReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case CUSTOMER_SUCCESS:
+      return {
+        ...state,
+        customer: action.payload,
+        error: null,
+      };
+    case CUSTOMERS_SUCCESS:
+      return {
+        ...state,
+        customers: action.payload,
+        error: null,
+      };
+    case ACCOUNT_SUCCESS:
+      return {
+        ...state,
+        account: action.payload,
+        error: null,
+      };
+    case ACCOUNTS_SUCCESS:
+      return {
+        ...state,
+        accounts: action.payload,
+        error: null,
       };
     case INVENTORY_FAMILIES_SUCCESS:
       return {

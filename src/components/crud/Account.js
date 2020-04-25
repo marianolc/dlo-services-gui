@@ -2,35 +2,47 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import HomeIcon from "@material-ui/icons/Home";
 import PersonIcon from "@material-ui/icons/Person";
-import GrainIcon from "@material-ui/icons/Grain";
-import Typography from "@material-ui/core/Typography";
 import { useHistory } from "react-router";
+import { makeStyles } from "@material-ui/core/styles";
 
 import ViewContainer from "../shared/ViewContainer";
-import { account, deleteAccount } from "../../actions";
+import { getAccount, deleteAccount } from "../../actions";
 import AccountForm from "./AccountForm";
 import translated from "../shared/Translated";
-import { useStyles } from "../shared/Styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2, 2),
+  },
+  breadcrumb_link: {
+    display: "flex",
+  },
+  breadcrumb_icon: {
+    marginRight: theme.spacing(0.5),
+    width: 20,
+    height: 20,
+  },
+}));
 
 const Account = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { data } = useSelector(({ crudData }) => crudData);
-  useEffect(() => {
-    dispatch(account(props.match.params.id));
-  }, []);
+  const { account } = useSelector(({ crudData }) => crudData);
   const classes = useStyles();
+
+  useEffect(() => {
+    dispatch(getAccount(props.match.params.id));
+  }, []);
 
   return (
     <>
-      {data && (
+      {account && (
         <Breadcrumbs aria-label='breadcrumb' className={classes.root}>
           <Link
             color='inherit'
             href='/'
-            onClick={() => history.push(`/customer/${data.customerId}`)}
+            onClick={() => history.push(`/customer/${account.customerId}`)}
             className={classes.breadcrumb_link}>
             <PersonIcon className={classes.breadcrumb_icon} />
             {translated("customer.title.singular")}
@@ -42,7 +54,7 @@ const Account = (props) => {
         title={translated("account.title.singular")}
         content={AccountForm}
         onDelete={(d) => dispatch(deleteAccount(d))}
-        values={data}
+        values={account}
         updateView={"/update-account"}
       />
     </>

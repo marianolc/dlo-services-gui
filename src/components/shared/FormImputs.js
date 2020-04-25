@@ -71,19 +71,20 @@ export const FormText = ({
   );
 };
 
-export const FormTextWithIcon = (props) => {
-  const {
-    fieldName,
-    description,
-    placeholder,
-    values,
-    handleChange,
-    handleBlur,
-    type,
-    errors,
-    touched,
-    readOnly,
-  } = props;
+export const FormTextWithIcon = ({
+  fieldName,
+  description,
+  placeholder,
+  values,
+  handleChange,
+  handleBlur,
+  type,
+  errors,
+  touched,
+  readOnly,
+  value,
+  icon,
+}) => {
   const inputProps = readOnly ? { readOnly: true } : {};
   const fieldTouched = touched && touched[fieldName];
   const error = errors && errors[fieldName] && fieldTouched;
@@ -93,13 +94,13 @@ export const FormTextWithIcon = (props) => {
       label={description}
       fullWidth
       placeholder={placeholder}
-      defaultValue={values[fieldName]}
+      defaultValue={value || values[fieldName]}
       onChange={handleChange}
       onBlur={handleBlur}
       InputProps={{
         ...inputProps,
         startAdornment: (
-          <InputAdornment position='start'>{props.icon}</InputAdornment>
+          <InputAdornment position='start'>{icon}</InputAdornment>
         ),
       }}
       error={error}

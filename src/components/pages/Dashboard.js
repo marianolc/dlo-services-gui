@@ -10,18 +10,61 @@ import {
   IconButton,
   MenuItem,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
 import MenuIcon from "@material-ui/icons/Menu";
 import FlagOptionIcon from "@material-ui/icons/Flag";
 import { FlagIcon } from "react-flag-kit";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-
 import { useDispatch } from "react-redux";
-import { useStyles } from "../shared/Styles";
 import ContentDrawer from "../layout/ContentDrawer";
 
 import { logout, changeLanguage } from "../../actions";
 import translated from "../shared/Translated";
 import SideMenu from "../../components/SideMenu";
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) => ({
+  dashboard_root: {
+    display: "flex",
+  },
+  dashboard_appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: "#E5E7E9",
+    color: "#000",
+  },
+  dashboard_drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  dashboard_drawerPaper: {
+    width: drawerWidth,
+  },
+  dashboard_grow: {
+    flexGrow: 1,
+  },
+  dashboard_content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  dashboard_toolbar: theme.mixins.toolbar,
+  dashboard_menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  dashboard_contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
+}));
 
 const Dashboard = () => {
   const dispatch = useDispatch();

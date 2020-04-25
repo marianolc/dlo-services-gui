@@ -11,6 +11,10 @@ import {
   VIEW_FAILURE,
   AUTH_REQUEST,
   VIEW_UPDATE,
+  CUSTOMER_SUCCESS,
+  CUSTOMERS_SUCCESS,
+  ACCOUNT_SUCCESS,
+  ACCOUNTS_SUCCESS,
   INVENTORY_FAMILIES_SUCCESS,
   INVENTORY_MODEL_SUCCESS,
   INVENTORY_MODELS_SUCCESS,
@@ -47,7 +51,7 @@ export const changeLanguage = (newLang) => {
 };
 
 export const login = (user, password) => {
-  return async function(dispatch) {
+  return async function (dispatch) {
     try {
       dispatch({ type: AUTH_REQUEST });
       const response = await services.post("/authenticate", {
@@ -63,7 +67,7 @@ export const login = (user, password) => {
 };
 
 export const logout = () => {
-  return async function(dispatch) {
+  return async function (dispatch) {
     localStorage.removeItem("sessionToken");
     dispatch({ type: SESSION_FAILURE, payload: { message: null } });
   };
@@ -90,7 +94,7 @@ function handleError(err, type) {
 // *********************************************************************************************************************
 
 const listView = (path, sucessAction) => {
-  return async function(dispatch) {
+  return async function (dispatch) {
     dispatch({ type: LIST_REQUEST });
     try {
       const response = await services.get(`/api${path}`, buildHeader());
@@ -102,7 +106,7 @@ const listView = (path, sucessAction) => {
 };
 
 const readView = (path, sucessAction) => {
-  return async function(dispatch) {
+  return async function (dispatch) {
     dispatch({ type: VIEW_REQUEST });
     try {
       const response = await services.get(`/api${path}`, buildHeader());
@@ -114,7 +118,7 @@ const readView = (path, sucessAction) => {
 };
 
 const readViewList = (paths, sucessAction) => {
-  return async function(dispatch) {
+  return async function (dispatch) {
     dispatch({ type: VIEW_REQUEST });
     try {
       const promises = paths.map((path) =>
@@ -129,7 +133,7 @@ const readViewList = (paths, sucessAction) => {
 };
 
 const createView = (path, data, dest) => {
-  return async function(dispatch) {
+  return async function (dispatch) {
     dispatch({ type: VIEW_UPDATE });
     try {
       const response = await services.post("/api" + path, data, buildHeader());
@@ -142,7 +146,7 @@ const createView = (path, data, dest) => {
 };
 
 const updateView = (path, data, dest) => {
-  return async function(dispatch) {
+  return async function (dispatch) {
     dispatch({ type: VIEW_UPDATE });
     try {
       const response = await services.put("/api" + path, data, buildHeader());
@@ -155,7 +159,7 @@ const updateView = (path, data, dest) => {
 };
 
 const deleteView = (url, data, dest) => {
-  return async function(dispatch) {
+  return async function (dispatch) {
     dispatch({ type: VIEW_UPDATE });
     try {
       await services.delete("/api" + url, buildHeader());
@@ -171,13 +175,14 @@ const deleteView = (url, data, dest) => {
 // *********************************************************************************************************************
 // *********************************************************************************************************************
 
-export const customers = () => listView("/customers");
+export const customers = () => listView("/customers", CUSTOMERS_SUCCESS);
 export const customersFiltered = (data) => {
   const params = new URLSearchParams(data);
   const url = `/customers?${params}`;
-  return listView(url);
+  return listView(url, CUSTOMERS_SUCCESS);
 };
-export const customer = (id) => readView(`/customer/${id}`);
+export const getCustomer = (id) =>
+  readView(`/customer/${id}`, CUSTOMER_SUCCESS);
 export const createCustomer = (data) =>
   createView("/customer", data, (d) => `/customer/${d.id}`);
 export const updateCustomer = (id, data) =>
@@ -191,7 +196,7 @@ export const accountsFiltered = (data) => {
   const url = `/accounts?${params}`;
   return listView(url);
 };
-export const account = (id) => readView("/account/" + id);
+export const getAccount = (id) => readView("/account/" + id, ACCOUNT_SUCCESS);
 export const createAccount = (data) =>
   createView("/account", data, (d) => `/account/${d.id}`);
 export const updateAccount = (id, data) =>

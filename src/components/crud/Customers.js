@@ -11,11 +11,11 @@ const Customers = () => {
   useEffect(() => {
     dispatch(customersFiltered(filters));
   }, [filters]);
-  const { data } = useSelector(({ crudData }) => crudData);
+  const { customers } = useSelector(({ crudData }) => crudData);
 
   return (
     <TableContainer
-      data={data}
+      data={customers}
       onRefresh={() => dispatch(customersFiltered(filters))}
       title={translated("customer.title")}
       columns={[

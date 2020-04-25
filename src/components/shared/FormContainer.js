@@ -4,10 +4,23 @@ import { Container, Paper, Button, Grid, Typography } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { useHistory } from "react-router-dom";
 import { Save as SaveIcon } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
 import { Formik, Form } from "formik";
+
 import ErrorMessage from "./ErrorMessage";
 import translated from "./Translated";
-import { useStyles } from "./Styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2, 2),
+  },
+  titleElement: {
+    padding: theme.spacing(2),
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
 
 const drawActions = (waitingUpdate, classes, history, { id }) => {
   return (
