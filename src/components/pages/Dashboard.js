@@ -31,8 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
   dashboard_appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: "#E5E7E9",
-    color: "#000",
   },
   dashboard_drawer: {
     width: drawerWidth,
