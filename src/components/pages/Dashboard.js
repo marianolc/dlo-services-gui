@@ -121,7 +121,7 @@ const Dashboard = () => {
   return (
     <React.Fragment>
       <div className={classes.dashboard_root}>
-        <AppBar position='fixed' className={classes.dashboard_appBar}>
+        <AppBar color="primary" position='fixed' className={classes.dashboard_appBar}>
           <Toolbar>
             <IconButton
               color='inherit'

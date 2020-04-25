@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import { createMuiTheme } from "@material-ui/core/styles";
 import { Router } from "react-router-dom";
 import { I18nextProvider } from "react-i18next";
@@ -11,21 +13,15 @@ import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
 
 const theme = createMuiTheme({
-  palette: {
-    primary1Color: "#f44336",
-    accent1Color: "#ad1457",
-  },
-  overrides: {
-    muiAppBar: {
-      color: "#E5E7E9",
-      textColor: "#000000",
+    appBar: {
+        color: "#9e9e9e"
     },
-  },
+    palette: {
+        primary: "#f44336",
+        secondary: "#7b1fa2"
+    }
 });
 
-const useDarkMode = () => {
-  const [theme, setTheme] = useState(theme);
-};
 
 class App extends React.Component {
   render() {
